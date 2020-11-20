@@ -1,0 +1,371 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Dan's Tutorials: 04 - Constructive Solid Geometry</title>
+	<LINK REL="stylesheet" HREF="tutorial_styles.css">
+</head>
+
+<BODY BGCOLOR="white">
+<a name="top"></a>
+<BR>
+<CENTER>
+<!--
+<br>
+<DIV CLASS="main1">DAN'S</div><div class="main2">Programming Tutorials</DIV>
+<br>
+<TABLE WIDTH="700" BORDER="0" CELLPADDING="5" CELLSPACING="0">
+<TR><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+[</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="index.shtml">news</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+tutorials</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<!--A HREF="Files.shtml"--><!--files</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<a href="ResourcesWeb.shtml">links</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="Contact.shtml">contact</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+]</B></FONT>
+</TD></TR>
+</TABLE>
+-->
+<BR>
+
+<TABLE WIDTH="700" BORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="CENTER" VALIGN="TOP">
+
+<tr>
+<td valign="top" align="left" width="200">
+
+<TABLE WIDTH="200" BORDER="1" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver" ALIGN="center">
+<FONT FACE="arial" COLOR="black"><B>Table of Contents</B></FONT>
+</TD></TR>
+</TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="3" CELLSPACING="0"><TR><TD>
+<FONT FACE="arial" SIZE="-1">
+<BR>
+<CENTER><B>3D</B></CENTER>
+Creating a cutting-edge engine<BR>
+ &nbsp; <A HREF="Engine01.shtml">01 - Design document</A><BR>
+ &nbsp; <A HREF="Engine02.shtml">02 - Overall structure</A><BR>
+<BR>
+ &nbsp; <A HREF="Engine03.shtml">03 - Binary Space Partitioning</A><BR>
+ &nbsp; <A HREF="Engine04.shtml">04 - Constrctive Solid Geometry</A><BR>
+ &nbsp; <A HREF="Engine05.shtml">05 - Portals</A><BR>
+ &nbsp; <A HREF="Engine06.shtml">06 - Possible Visible Set</A><BR>
+ &nbsp; <A HREF="Engine07.shtml">07 - Radiosity lighting</A><BR>
+ &nbsp; <!--A HREF="Engine08.shtml"-->08 - Mirrors</A><BR>
+<BR>
+<!--A HREF="Dictionary.shtml"-->Dictionary of 3D terms</A><BR>
+<BR>
+<CENTER><B>OTHER</B></CENTER>
+<!--A HREF="GeneticAlgorithm.shtml"-->A Genetic Algorithm</A><BR>
+<A HREF="Line01.shtml">Line drawing</a><BR>
+<!--A HREF="Line02.shtml"-->Line clipping</a><BR>
+<!--A HREF="Line03.shtml"-->Line antialiasing</a><BR>
+<!--A HREF="Line04.shtml"-->Line thickening</a><BR>
+<!--A HREF="Line05.shtml"-->Line curving</a><BR>
+<br>
+<A HREF="ResourcesPrint.shtml">Resources in print</A><BR>
+<A HREF="ResourcesWeb.shtml">Resources on the web</A><BR>
+<!--A HREF="ResourcesFiles.shtml"-->Resources to download</A><BR>
+<BR>
+</FONT>
+</TD></TR></TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR><TD HEIGHT="850"></TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-2">
+This is not mind control.<br>
+<br>
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Think about it.</FONT></TD></TR>
+<TR><TD HEIGHT="1000"></TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-2">
+Can you believe I did all that coloring by hand?  One word: Insomnia.</FONT></TD></TR>
+<TR><TD HEIGHT="600"></TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-2">
+Of course, if your BSP is 2D you won't HAVE T-junctions.  I wonder what kind of problems arise in 4D?
+ Ick.</FONT></TD></TR>
+<TR><TD HEIGHT="1250"></TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-2">
+1. <i>The Cat in the Hat</i> by Dr. Seuss<br>
+<img src="thecatinthehat.jpg" width="100" height="154" alt="Sam, I am." border="0"></FONT></TD></TR>
+</TABLE>
+</td>
+<td valign="top" align="right" width="500">
+
+<table width="475" border="0" cellpadding="3" cellspacing="0">
+<tr><td bgcolor="silver">
+<font face="arial"><b>04 - Constructive Solid Geometry</b></font>
+</td></tr>
+<tr><td><font face="arial" size="-1">
+If you're reading this letter, it means that I'm dead.  No, wait, I'm still typing.  Silly me, this is
+ the part where I'm supposed to talk about Constructive Solid Geometry.  Note to self: more drugs.  No,
+ that can't be right...<i>Ahem</i> I think I'll try again.<br>
+<br>
+If you've made it this far I certainly hope you have a firm, two handed grip on BSPs (I reccomend a
+ half-nelson and scissorhold combo).  Why?  Because now were are getting into some seriously dark
+ mojo, that mysterious realm known as Constructive Solid Geometry (CSG).  CSG is the process of
+ performing regularized boolean set operations on geometric primitives in order to obtain more
+ complicated models.  For example, two square could be added together to form a star-like shape.
+ a small cube could be subtracted from a large "wall" to create a window or a door.  And so on.<br>
+<br>
+So: we've got 2 large sets of polygons that form closed volumes and the two sets may or may not
+ intersect.  Gee, there's got to be an easy way to figure out if and where.  But what could it be...
+ hmm... how about... the BSP trees?  Why, how convenient!<br>
+<br>
+I want to make sure you don't get the wrong impression: CSG does not <i>have</i> to be performed with
+ BSP trees.  But it's a lot easier.  On a mostly unrelated topic, I want to make sure you get the right
+ impression: at the time I'm writing these words, this page is the ONLY online source for CSG
+ information.  I had to figure it out myself and (of course) it was only after that I met some people
+ who had succeeded in figuring it out.  So don't thank me for putting this here, just tell all your
+ friends about it. (=<br>
+<br>
+There are four basic types of operations: addition, subtraction, intersection and difference.  Given
+ that we have a really simple case like two squares <font color="7777aa"><B>A</b></font> and
+ <font color="aa7777"><B>B</b></font>:<br>
+<br>
+<p align="center"><img src="0401.jpg" width="100" height="100" alt="A & B" border="0"></p>
+<br>
+Then the four operations would have the following results (respectively):<br>
+<br>
+<p align="center">
+<img src="0402.jpg" width="100" height="100" alt="A + B" border="0">
+<img src="0403.jpg" width="100" height="100" alt="A - B" border="0">
+<img src="0404.jpg" width="100" height="100" alt="A & B" border="0">
+<img src="0405.jpg" width="100" height="100" alt="A ^ B" border="0"><br>
+(The darkened portion remains after each operation)<br>
+</p>
+<br>
+Now let's see if there's a pattern in these CSG operations that will help us break down the problem
+ into something we can code.  Take a good look at addition.  Notice anything special?  The part that
+ remains is the the sum of all of <font color="7777aa"><B>A</b></font> that was outside of
+ <font color="aa7777"><B>B</b></font> and all of <font color="aa7777"><B>B</b></font> that was outside
+ of <font color="7777aa"><B>A</b></font>!  So how do we code it?<br>
+<ul>
+<li>Take every polygon in <font color="7777aa"><B>A</b></font> and "push" it through the BSP tree of
+ <font color="aa7777"><B>B</b></font>.
+<li>If a polygon being pushed through the tree is coplanar with a node plane, test the polygon normal
+ so see if it matches the plane normal.  If they match, push it down the inside.  If they don't, push
+ it down the outside.
+<li>Any polygon "remnants" that end on an outside leaf are stored.
+<li>Any polygons remnants that end on an inside leaf are deleted.
+<li>Repeat the process with every polygon in <font color="aa7777"><B>B</b></font> against the BSP
+ tree <font color="7777aa"><B>A</b></font>.
+</ul>
+Similar patterns can be found for the other 3 operations:<br>
+<ul>
+<li><b>Subtraction</b>: All <font color="aa7777"><B>B</b></font> inside
+ <font color="7777aa"><B>A</b></font> FLIPPED and all <font color="7777aa"><B>A</b></font> outside
+ <font color="aa7777"><B>B</b></font>.
+<li><b>Intersecion</b>: All <font color="7777aa"><B>A</b></font> inside
+ <font color="aa7777"><B>B</b></font> and all <font color="aa7777"><B>B</b></font> inside
+ <font color="7777aa"><B>A</b></font>.
+<li><b>Difference</b>: <font color="7777aa"><B>A</b></font> subtract
+ <font color="aa7777"><B>B</b></font> and <font color="aa7777"><B>B</b></font> subtract
+ <font color="7777aa"><B>A</b></font>.
+</ul>
+<hr>
+Note: When I say 'flipped' I mean that the polygons have to have their normals inverted and (unless you
+ have some really fancy engine) the polygons' point order will have to be inverted.<br>
+<hr>
+<br>
+Ok everyone, take a minute to let that sink in, work it on a piece of paper until you believe what I'm
+ saying and <b>do not</b> go further until you are sure you understand what I just wrote or you will
+ fall into a pit who's bottom does not exist in this reality but rather a very hot place where little
+ accountants stick you in the ass with pitchforks to see if you're cooked through.<br>
+<br>
+Right, now how do we find which bits are inside or outside the BSP?  Once again, a recursive function
+ comes to our aide!<br>
+<br>
+</font>
+<pre>
+<FONT COLOR="Green">/* CSGClipPolygon( cPolygon *pPoly, int side )
+ * Returns a linked list of all the "fragments"
+ * left over after clipping pPoly to this node.
+ * side=ZV_NODE_FRONT - delete all inside fragments
+ * side=ZV_NODE_BACK - delete all outside fragments
+ * This method is designed to work with node-based
+ * BSPs, it wouldn't take much effort to convert.
+ */</FONT>
+cPolygon <FONT COLOR="Navy">*</FONT>cNode<FONT COLOR="Navy">::</FONT>CSGClipPolygon<FONT COLOR="Navy">(</FONT>
+    cPolygon <FONT COLOR="Navy">*</FONT>pPoly<FONT COLOR="Navy">,</FONT> int side <FONT COLOR="Navy">) {</FONT>
+  <FONT COLOR="blue">int</FONT> test<FONT COLOR="Navy">;</FONT>
+
+  <FONT COLOR="Green">// pPlane is a member of cNode</FONT>
+  test <FONT COLOR="Navy">=</FONT> pPoly<FONT COLOR="Navy">-></FONT>TestAgainstPlane<FONT COLOR="Navy">(</FONT> pPlane <FONT COLOR="Navy">)</FONT><FONT COLOR="Navy">;</FONT>
+  if<FONT COLOR="Navy">(</FONT> test <FONT COLOR="Navy">==</FONT> ZV_PLANE_COPLANAR_FRONT 
+   <FONT COLOR="Navy">||</FONT> test <FONT COLOR="Navy">==</FONT> ZV_PLANE_COPLANAR_BACK <FONT COLOR="Navy">)</FONT> test <FONT COLOR="Navy">=</FONT> side<FONT COLOR="Navy">;</FONT>
+
+  <FONT COLOR="blue">switch</FONT><FONT COLOR="Navy">(</FONT> test <FONT COLOR="Navy">) {</FONT>
+    <FONT COLOR="blue">case</FONT> ZV_PLANE_FRONT<FONT COLOR="Navy">:</FONT>
+      <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> pInside <FONT COLOR="Navy">)</FONT>
+        <FONT COLOR="blue">return</FONT> pInside<FONT COLOR="Navy">-></FONT>CSGClipPolygon( pPoly<FONT COLOR="Navy">,</FONT> side <FONT COLOR="Navy">);</FONT>
+      <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> side <FONT COLOR="Navy">==</FONT> ZV_PLANE_FRONT <FONT COLOR="Navy">)</FONT> <FONT COLOR="blue">delete</FONT> pPoly<FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="blue">return</FONT> pPoly<FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="blue">break</FONT><FONT COLOR="Navy">;</FONT>
+    <FONT COLOR="blue">case</FONT> ZV_PLANE_BACK<FONT COLOR="Navy">:</FONT>
+      <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> pOutside <FONT COLOR="Navy">)</FONT>
+        <FONT COLOR="blue">return</FONT> pOutside<FONT COLOR="Navy">-></FONT>CSGClipPolygon<FONT COLOR="Navy">(</FONT> pPoly<FONT COLOR="Navy">,</FONT> side <FONT COLOR="Navy">);</FONT>
+      <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> side <FONT COLOR="Navy">==</FONT> ZV_PLANE_BACK <FONT COLOR="Navy">)</FONT> <FONT COLOR="blue">delete</FONT> pPoly<FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="blue">return</FONT> pPoly<FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="blue">break</FONT><FONT COLOR="Navy">;</FONT>
+    <FONT COLOR="blue">case</FONT> ZV_PLANE_SPLIT<FONT COLOR="Navy">:</FONT>
+      cPolygon <FONT COLOR="Navy">*</FONT>pIn<FONT COLOR="Navy">,</FONT> <FONT COLOR="Navy">*</FONT>pOut<FONT COLOR="Navy">,</FONT> <FONT COLOR="Navy">*</FONT>pRetIn<FONT COLOR="Navy">,</FONT> <FONT COLOR="Navy">*</FONT>pRetOut<FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="blue">int</FONT> loss<FONT COLOR="Navy">;</FONT>
+
+      loss <FONT COLOR="Navy">=</FONT> <font color="Red">0</font><FONT COLOR="Navy">;</FONT>
+      pTest<FONT COLOR="Navy">-></FONT>Split<FONT COLOR="Navy">(</FONT> pPlane<FONT COLOR="Navy">, & </FONT>pIn<FONT COLOR="Navy">, & </FONT>pOut <FONT COLOR="Navy">);</FONT>
+      <FONT COLOR="Green">// check to make sure Split succeeded</FONT>
+
+      pRetIn <FONT COLOR="Navy">=</FONT> NULL<FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> pInside <FONT COLOR="Navy">) {</FONT>
+        pRetIn <FONT COLOR="Navy">=</FONT> pInside<FONT COLOR="Navy">-></FONT>CSGClipPolygon( pIn<FONT COLOR="Navy">,</FONT> side <FONT COLOR="Navy">);</FONT>
+        <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> pRetIn <FONT COLOR="Navy">!=</FONT> pIn <FONT COLOR="Navy">)</FONT> loss <FONT COLOR="Navy">=</FONT> 1<FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="Navy">}</FONT> <FONT COLOR="blue">else if</FONT><FONT COLOR="Navy">(</FONT> side <FONT COLOR="Navy">==</FONT> ZV_PLANE_FRONT <FONT COLOR="Navy">) {</FONT>
+        <FONT COLOR="blue">delete</FONT> pIn<FONT COLOR="Navy">;</FONT>
+        loss <FONT COLOR="Navy">=</FONT> <font color="Red">1</FONT><FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="Navy">}</FONT> <FONT COLOR="blue">else</FONT> pRetIn <FONT COLOR="Navy">=</FONT> pIn;
+
+      pRetOut <FONT COLOR="Navy">=</FONT> NULL<FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> pOutside <FONT COLOR="Navy">) {</FONT>
+        pRetOut <FONT COLOR="Navy">=</FONT> pOutside<FONT COLOR="Navy">-></FONT>CSGClipPolygon( pOut<FONT COLOR="Navy">,</FONT> side <FONT COLOR="Navy">);</FONT>
+        <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> pRetOut <FONT COLOR="Navy">!=</FONT> pOut <FONT COLOR="Navy">)</FONT> loss <FONT COLOR="Navy">=</FONT> 1<FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="Navy">}</FONT> <FONT COLOR="blue">else if</FONT><FONT COLOR="Navy">(</FONT> side <FONT COLOR="Navy">==</FONT> ZV_PLANE_BACK <FONT COLOR="Navy">) {</FONT>
+        <FONT COLOR="blue">delete</FONT> pOut<FONT COLOR="Navy">;</FONT>
+        loss <FONT COLOR="Navy">=</FONT> <font color="Red">1</FONT><FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="Navy">}</FONT> <FONT COLOR="blue">else</FONT> pRetOut <FONT COLOR="Navy">=</FONT> pOut;
+
+      <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> loss <FONT COLOR="Navy">) {</FONT>
+        <FONT COLOR="blue">delete</FONT> pIn<FONT COLOR="Navy">;</FONT>
+        <FONT COLOR="blue">delete</FONT> pOut<FONT COLOR="Navy">;</FONT>
+        <FONT COLOR="blue">return</FONT> pPoly<FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="Navy">}</FONT> else <FONT COLOR="Navy">{</FONT>
+        <FONT COLOR="blue">delete</FONT> pPoly<FONT COLOR="Navy">;</FONT>
+        <FONT COLOR="Green">// link all pIn and pOut fragments 
+        // into a linked list and return them.</font>
+      <FONT COLOR="Navy">}</FONT>
+      <FONT COLOR="blue">break</FONT><FONT COLOR="Navy">;</FONT>
+  <FONT COLOR="Navy">}</FONT>
+  <FONT COLOR="blue">return</FONT> NULL<FONT COLOR="Navy">;</FONT>
+<FONT COLOR="Navy">}</FONT>
+</pre>
+<font face="arial" size="-1">
+The real beauty of the above system is <b>loss</b>.  Can you see what it does?  If a polygon fragment
+ is split but neither half is deleted, the original polygon fragment is kept.  This minimizes the total
+ number of polygons in the world and <i>really</i> saves us a lot of work.  Still, after you use CSG
+ operations to build a world there will probably be a number of unnecessary splits.  To fix this, go
+ back through the polygons and merge all the appropriate polygons.  Which ones are those?  We'll cover
+ that next.<br>
+<br>
+<hr>
+<br>
+Wow, you're still reading.  That or you've gone blind staring at your screen and now the orderly reads
+ to you (when he's not giving your sponge bath).<br>
+<br>
+By now you've successfully finished CSG and you're building all kinds of complicated levels with
+ twisting hallways, staircases and neat archways.  Feel like you're the only one that cares?  Don't
+ worry, it's just because the little people are so fickle, they don't realize the blood sweat and tears
+ you put into reading my page - I mean, writing your engine (doh!)  As you fly around the models you're
+ probably noticing that a) Things could and should be a lot faster and b) There are all these funny
+ little gaps all over the place that are really friggin' ugly.  How did they get rid of them in
+ all those other 3D engines?<br>
+<br>
+I'm going to tackle that first part last and explain why later.  <i>Sub-pixel gaps</i> are a result of
+ splitting polygons, so both BSP building and CSG are to blame.  Sub-pixel gaps will be unavoidable as
+ long as there's a finite number of decimal places in computer calculations.  What's happening is that
+ there are edges that <i>just barely</i> fail to match up at T-junctions, as depicted.<br>
+<br>
+<p align="center"><img src="0406.jpg" width="200" height="200" alt="T-junctions" border="0"></p><br>
+<br>
+The solution is to search for all these gaps and close them by adding that last point to the adjacent
+ polygon.  Of course, you have to search the entire model.  When you're done, though, all the gaps
+ should be closed.<br>
+<br>
+<p align="center"><img src="0407.jpg" width="200" height="200" alt="Closed T-junctions" border="0"></p><br>
+<br>
+The slowing down, on the other hand, is a lot more complicated.  As more and more CSG operations are
+ done, more and more polygons are created as bits and pieces are removed.  Although the <b>loss</b>
+ method I showed you does a great job of cutting down the total number of unnecessary fragments there
+ will still be a signifigant number when the model is finished.  The really annoying part is that you
+ can't delete all these little pieces or there will be "holes" in the model.  The answer is to try and
+ merge together as many as possible.  Which ones are good candidates for merging?  Well, they have to
+ be polygons that...<br>
+<ol>
+<li>...Are on the same node.
+<li>...Are coplanar.
+<li>...Have the same texture
+<li>...Have a shared edge.
+<li>...Have textures that are aligned and scaled the same ammount.
+<li>...Are convex forming.
+</ol>
+"Not so bad, I can do that ...What the hell?  Convex forming!?  Aw, crap!"  He he he, you're absolutely
+ right, it was no fun.  I'll give you a hint though:  If you do all the tests in the order I listed
+ them, you should be able to prove convexivity (huh?) with two subtractions, a cross product, a
+ vector normalization and a single <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">()</FONT> for each
+ end of the shared edge.  Remember, you're looking for <i>angles of a particular value</i>.  By the way:
+ the reason I explained T-junction removal first is because if the edges are not the same length or
+ have a different number of points then it makes finding matching edges really really annoying.<br>
+<br>
+One last optimization before we get out of this hell-hole called CSG.  Search for all polygons that
+ share two consecutive edges with another polygon.  If the two edges are colinear (they form a straight
+ line) then you can remove the point in the middle.  One less point, one less thing for the final stage
+ rasterizer to worry about.<br>
+<br>
+<hr>
+<br>
+Unfortunately, there aren't many ways to hunt down bugs in CSG.  All I can suggest is, as usual, start
+ with the simplest test cases you can think up and then work your way up.  It will probably help to
+ trace the direction polygon fragments travel through the test tree, it will give you some idea of
+ where things go bad.  Asides from that, all you can do is cross your fingers.
+<br>
+<hr>
+<br>
+SO.  We've covered Constructive Solid Geometry.  We've looked at some methods of optimizing the model
+ when we're done building.  We laughed.  We cried.  We became better people.  It took me four months to
+ invent my CSG routines (having no resource to draw from).  It was another 6 months before I realized
+ that my first version was a <i>total</i> screw-up.  Two more week to rewrite the new version.  Nine and
+ a half hours to write this page.  So don't be suprised if it takes you a while to get the hang of this
+ stuff.  But when you do, "Oh, the places you'll go!"<sup>1</sup>  Take, for example, the next section.
+ Portals are a world of adventure and fun just waiting for you!  You can build an entire engine on
+ nothing but portals like <a href="http://www.dukenukem.com">Duke Nukem' 3D</a> and when you add them to
+ a BSP engine you can do some really cool things.  Like Mirrors.  And reducing raster overdraw to
+ nothing.  And more.  Stay tuned.<br>
+<br>
+<a href="#top">Back to the top</a>
+<hr>
+<b>PREV: <a href="Engine03.shtml">Binary Space Partitioning</a></b><br>
+<b>NEXT: <a href="Engine05.shtml">Portals</a></b><br>
+<br><BR></font>
+</td></tr></table>
+</td>
+</tr>
+
+</TABLE>
+
+<HR ALIGN="CENTER" SIZE="1" WIDTH="700" NOSHADE>
+<FONT FACE="arial" SIZE="-2">All photos copyright of their respective owners.  All other content of this website is &copy; 1997-1999 Dan Royer.<BR>
+Designed for IE 5.0+, 800x600x16 or greater.  Some pages use style sheets.<br>
+<A HREF="http://members.home.com/droyer/index.html"
+   TITLE="Dan's Homepage">http://members.home.com/droyer/index.html</A><br>
+</FONT>
+
+</CENTER>
+<BR>
+<BR>
+
+</BODY>
+</HTML>
+</html>

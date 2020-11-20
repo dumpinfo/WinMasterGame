@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<HTML>
+<HEAD>
+	<TITLE>Dan's Tutorials: Resources on the Web</TITLE>
+	<LINK REL="stylesheet" HREF="tutorial_styles.css">
+</HEAD>
+
+<BODY BGCOLOR="white">
+<a name="top"></a>
+<BR>
+<CENTER>
+<!--
+<br>
+<DIV CLASS="main1">DAN'S</div><div class="main2">Programming Tutorials</DIV>
+<br>
+<TABLE WIDTH="700" BORDER="0" CELLPADDING="5" CELLSPACING="0">
+<TR><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+[</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="index.shtml">news</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+tutorials</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<!--A HREF="Files.shtml"--><!--files</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<a href="ResourcesWeb.shtml">links</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="Contact.shtml">contact</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+]</B></FONT>
+</TD></TR>
+</TABLE>
+-->
+<BR>
+
+<TABLE WIDTH="700" BORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="CENTER" VALIGN="TOP">
+
+<TR>
+<TD VALIGN="top" ALIGN="left" WIDTH="200">
+
+<TABLE WIDTH="200" BORDER="1" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver" ALIGN="center">
+<FONT FACE="arial" COLOR="black"><B>Table of Contents</B></FONT>
+</TD></TR>
+</TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="3" CELLSPACING="0"><TR><TD>
+<FONT FACE="arial" SIZE="-1">
+<BR>
+<CENTER><B>3D</B></CENTER>
+Creating a cutting-edge engine<BR>
+ &nbsp; <A HREF="Engine01.shtml">01 - Design document</A><BR>
+ &nbsp; <A HREF="Engine02.shtml">02 - Overall structure</A><BR>
+<BR>
+ &nbsp; <A HREF="Engine03.shtml">03 - Binary Space Partitioning</A><BR>
+ &nbsp; <A HREF="Engine04.shtml">04 - Constrctive Solid Geometry</A><BR>
+ &nbsp; <A HREF="Engine05.shtml">05 - Portals</A><BR>
+ &nbsp; <A HREF="Engine06.shtml">06 - Possible Visible Set</A><BR>
+ &nbsp; <A HREF="Engine07.shtml">07 - Radiosity lighting</A><BR>
+ &nbsp; <!--A HREF="Engine08.shtml"-->08 - Mirrors</A><BR>
+<BR>
+<!--A HREF="Dictionary.shtml"-->Dictionary of 3D terms</A><BR>
+<BR>
+<CENTER><B>OTHER</B></CENTER>
+<!--A HREF="GeneticAlgorithm.shtml"-->A Genetic Algorithm</A><BR>
+<A HREF="Line01.shtml">Line drawing</a><BR>
+<!--A HREF="Line02.shtml"-->Line clipping</a><BR>
+<!--A HREF="Line03.shtml"-->Line antialiasing</a><BR>
+<!--A HREF="Line04.shtml"-->Line thickening</a><BR>
+<!--A HREF="Line05.shtml"-->Line curving</a><BR>
+<br>
+<A HREF="ResourcesPrint.shtml">Resources in print</A><BR>
+<A HREF="ResourcesWeb.shtml">Resources on the web</A><BR>
+<!--A HREF="ResourcesFiles.shtml"-->Resources to download</A><BR>
+<BR>
+</FONT>
+</TD></TR></TABLE>
+
+</TD>
+<TD VALIGN="top" ALIGN="left" WIDTH="500">
+<TABLE WIDTH="500" BORDER="0" CELLPADDING="3" CELLSPACING="0">
+<TR><TD ALIGN="right" VALIGN="top">
+
+<TABLE WIDTH="475" BORDER="0" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver">
+<FONT FACE="arial"><B>Resources on the Web</B></FONT>
+</TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-1">
+Here's a list of some of the internet I've located while searching the porn.  If you know of a site
+ that would be good to add or you've found one of these links is bad, <a href="contact.shtml">write
+ me</a>.
+<BR>
+<br>
+<HR>
+<b><A NAME="WebDan">Dan's homepage</a><br>
+ &nbsp; <a href="http://members.home.com/droyer/index.html">http://members.home.com/droyer/index.html</A></b><br>
+<br>
+Dan hails from The Land where the Wylde Thyngs Are.  His page is an ecclectic collection of a lot of
+ messed up stuff, but it's all good.  I give it four stars.  Four stars and a blue moon.  But no purple
+ horseshoes.  Just because they say those things are edible doesn't mean you should put them in your
+ mouth.  Silly rabbit, it's a kooky place for kids!
+<hr>
+<b><A NAME="WebCamillo">Milo's web page</a><br>
+ &nbsp; <a href="http://www.irth.net/milo/milo.htm">http://www.irth.net/milo/milo.htm</A></b><br>
+<br>
+Run by John D. Camillo, this is one of the longest running web pages on 3D programming with respect to
+ games and easily the oldest I know of.  With the exception of his links page, the most recent update
+ appears to be way back in 1997.  <i>Remember the 20th century?  Gee those were crazy times...</i>
+ Also, his email comes back as non-deliverable.  The lights are on but no one's home.  Still, a good
+ place to browse through if you're getting started on some more basic things like mipmapping or vector
+ math.
+<hr>
+<b><A NAME="WebSteering">Steering behaviour for autonomous characters</a><br>
+ &nbsp; <a href="http://hmt.com/cwr/steer/index.html">http://hmt.com/cwr/steer/index.html</A></b><br>
+<br>
+Ever wanted to know how little AI robots keep from bumping into each other?  This is the <i>coolest</i>
+ place to find out.  I say cool because it has the only USEFULL implementation of Java I have ever
+ seen.  Sometimes I open a web browser window on this thing and let it run all day as a screensaver, it
+ just flows so beautifully.  To top it off Craig Reynolds (the author) has about six pages of refrence
+ documentation and all his explanations are written in plain, concise english.  Truly, this is a site to
+ aspire to.
+<hr>
+<b><A NAME="Web3DEngines">The 3D Engines List</a><br>
+ &nbsp; <a href="http://cg.cs.tu-berlin.de/~ki/engines.html">http://cg.cs.tu-berlin.de/~ki/engines.html</A></b><br>
+<br>
+If it isn't listed here, it isn't a 3D engine.  Karsten Isakovic has done an amazing job of thoroughly
+ categorizing everything and it's simple layout belies the scope it covers, everything from different
+ platforms to recent updates to various technologies used to a forum.  The only problem is that the
+ site is hosted at the technical university of Berlin, meaning that sometimes downloads a little slower
+ than what you might like.  All in all, worth the wait.
+<hr>
+<b><A NAME="WebFilpcode">flipCode</a><br>
+ &nbsp; <a href="http://www.flipcode.com">http://www.flipcode.com</A></b><br>
+<br>
+Psykic runs one of the best resources for obtaining bleeding-edge tech info I've seen in a long long
+ time.  Online technical papers a question and answers department that seems to know everything under
+ the sun and monthly contests with some pretty nifty prizes (not to mention a sense of humor) make
+ this site worth visiting again and again.  Wow, who knew I could sound so corny?
+<hr>
+
+
+<br>
+<a href="#top">Back to the top</a><br>
+<BR>
+</TD></TR></TABLE>
+
+</TD></TR></TABLE>
+</TD>
+</TR>
+
+</TABLE>
+
+<HR ALIGN="CENTER" SIZE="1" WIDTH="700" NOSHADE>
+<FONT FACE="arial" SIZE="-2">All photos copyright of their respective owners.  All other content of this website is &copy; 1997-1999 Dan Royer.<BR>
+Designed for IE 5.0+, 800x600x16 or greater.  Some pages use style sheets.<br>
+<A HREF="http://members.home.com/droyer/index.html"
+   TITLE="Dan's Homepage">http://members.home.com/droyer/index.html</A><br>
+</FONT>
+
+</CENTER>
+<BR>
+<BR>
+
+</BODY>
+</HTML>
+</HTML>

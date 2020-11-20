@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<HTML>
+<HEAD>
+	<TITLE>Dan's Tutorials: Resources in print</TITLE>
+	<LINK REL="stylesheet" HREF="tutorial_styles.css">
+</HEAD>
+
+<BODY BGCOLOR="white">
+<a name="top"></a>
+<BR>
+<CENTER>
+<!--
+<br>
+<DIV CLASS="main1">DAN'S</div><div class="main2">Programming Tutorials</DIV>
+<br>
+<TABLE WIDTH="700" BORDER="0" CELLPADDING="5" CELLSPACING="0">
+<TR><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+[</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="index.shtml">news</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+tutorials</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<!--A HREF="Files.shtml"--><!--files</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<a href="ResourcesWeb.shtml">links</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="Contact.shtml">contact</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+]</B></FONT>
+</TD></TR>
+</TABLE>
+-->
+<BR>
+
+<TABLE WIDTH="700" BORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="CENTER" VALIGN="TOP">
+
+<TR>
+<TD VALIGN="top" ALIGN="left" WIDTH="200">
+
+<TABLE WIDTH="200" BORDER="1" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver" ALIGN="center">
+<FONT FACE="arial" COLOR="black"><B>Table of Contents</B></FONT>
+</TD></TR>
+</TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="3" CELLSPACING="0"><TR><TD>
+<FONT FACE="arial" SIZE="-1">
+<BR>
+<CENTER><B>3D</B></CENTER>
+Creating a cutting-edge engine<BR>
+ &nbsp; <A HREF="Engine01.shtml">01 - Design document</A><BR>
+ &nbsp; <A HREF="Engine02.shtml">02 - Overall structure</A><BR>
+<BR>
+ &nbsp; <A HREF="Engine03.shtml">03 - Binary Space Partitioning</A><BR>
+ &nbsp; <A HREF="Engine04.shtml">04 - Constrctive Solid Geometry</A><BR>
+ &nbsp; <A HREF="Engine05.shtml">05 - Portals</A><BR>
+ &nbsp; <A HREF="Engine06.shtml">06 - Possible Visible Set</A><BR>
+ &nbsp; <A HREF="Engine07.shtml">07 - Radiosity lighting</A><BR>
+ &nbsp; <!--A HREF="Engine08.shtml"-->08 - Mirrors</A><BR>
+<BR>
+<!--A HREF="Dictionary.shtml"-->Dictionary of 3D terms</A><BR>
+<BR>
+<CENTER><B>OTHER</B></CENTER>
+<!--A HREF="GeneticAlgorithm.shtml"-->A Genetic Algorithm</A><BR>
+<A HREF="Line01.shtml">Line drawing</a><BR>
+<!--A HREF="Line02.shtml"-->Line clipping</a><BR>
+<!--A HREF="Line03.shtml"-->Line antialiasing</a><BR>
+<!--A HREF="Line04.shtml"-->Line thickening</a><BR>
+<!--A HREF="Line05.shtml"-->Line curving</a><BR>
+<br>
+<A HREF="ResourcesPrint.shtml">Resources in print</A><BR>
+<A HREF="ResourcesWeb.shtml">Resources on the web</A><BR>
+<!--A HREF="ResourcesFiles.shtml"-->Resources to download</A><BR>
+<BR>
+</FONT>
+</TD></TR></TABLE>
+
+</TD>
+<TD VALIGN="top" ALIGN="left" WIDTH="500">
+<TABLE WIDTH="500" BORDER="0" CELLPADDING="3" CELLSPACING="0">
+<TR><TD ALIGN="right" VALIGN="top">
+
+<TABLE WIDTH="475" BORDER="0" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver">
+<FONT FACE="arial"><B>Resources in print</B></FONT>
+</TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-1">
+Here's a list of some of the many books and webpages that have helped me become the sick, demented
+ pervert I am today:<BR>
+<br>
+<HR>
+<b><A NAME="CGPAP">Computer Graphics: Principles & Practice</A></b><br>
+ &nbsp; Foley, van Dam, Feiner & Hughes<br>
+ &nbsp; Addison-Wesley Publishing Company<br>
+ &nbsp; ISBN 0-201-12110-7<br>
+<br>
+CG:PaP is the quintisential graphics refrence.  I have a copy of the second edition and there's more
+ in these 1200 pages than I'll ever get to know.  I mean for crying out loud, it has four authors.
+ If someone said to me it was because one brain couldn't hold all that info, I'd believe them.  It's
+ got a hefty pricetag but you'll only need to buy it once and you'll never out grow it.  I'd caution
+ that this is not the place to start in 3D.  It's written by stuffy university types and can be a very
+ boring read, making the learning curve on this text very steep.
+<HR>
+<b><A NAME="CGPAP">The Black Art of 3D Game Programming</A></b><br>
+ &nbsp; Andre Lamothe<br>
+ &nbsp; The Waite Group Press<br>
+ &nbsp; ISBN 1-57169-004-2<br>
+<br>
+I owe Andre for giving me my foothold in 3D.  Before I owned any other 3D books, I owned this.  I look
+ back now and I'm not as impressed but that's only because I know so much more now.  If you're looking
+ for a starting point that breaks things down into bite size pieces, this is the book for you.  Andre
+ has published eight titles to date including <i>Teach Yourself Game Programming in 21 Days</i>,
+ <i>Windows Game Programming for Dummies</i> and always seems to have another book in the works.  He's
+ also starred in <i>So I married a Game Programmer</i> and as one of the monsters in <i>Night of the
+ Living CEOs</i> but is best known for his role as the evil doctor Hoolio in <i>Game Programmers 2:
+ Final Fury</i>.  Who could forget his classic line "Ha ha ha!".  Ha ha ha, indeed, Mr. Lamothe.  Ha ha
+ ha.
+<HR>
+<b><A NAME="CGPAP"Large Scale C++ Software Design</A></b><br>
+ &nbsp; Musser & Saini<br>
+ &nbsp; Addison-Wesley Publishing Company<br>
+ &nbsp; ISBN 0-201-63398-1<br>
+<br>
+Do you find that as your project grows, you lose control?  Skeleton code, recursive linkages, huge build
+ times and worse plague you at every step of the way?  Are you feeling like it's time to chuck the whole
+ thing and restart from zero?  I feel your pain.  Or rather, I did until I got this book and learned how
+ to write clean, well structured code that did all sorts of good things and compiled a LOT faster.  So
+ go get it.  Now.  It'll change your life.  I'm Tony Robbins and you've been reading a book review.
+<hr>
+
+
+<br>
+<a href="#top">Back to the top</a><br>
+<BR>
+</TD></TR></TABLE>
+
+</TD></TR></TABLE>
+</TD>
+</TR>
+
+</TABLE>
+
+<HR ALIGN="CENTER" SIZE="1" WIDTH="700" NOSHADE>
+<FONT FACE="arial" SIZE="-2">All photos copyright of their respective owners.  All other content of this website is &copy; 1997-1999 Dan Royer.<BR>
+Designed for IE 5.0+, 800x600x16 or greater.  Some pages use style sheets.<br>
+<A HREF="http://members.home.com/droyer/index.html"
+   TITLE="Dan's Homepage">http://members.home.com/droyer/index.html</A><br>
+</FONT>
+
+</CENTER>
+<BR>
+<BR>
+
+</BODY>
+</HTML>
+</HTML>

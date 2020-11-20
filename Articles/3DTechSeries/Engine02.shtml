@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<HTML>
+<HEAD>
+	<TITLE>Dan's Tutorials: 02 - Overall structure</TITLE>
+	<LINK REL="stylesheet" HREF="tutorial_styles.css">
+</HEAD>
+
+<BODY BGCOLOR="white">
+<a name="top"></a>
+<BR>
+<CENTER>
+<!--
+<br>
+<DIV CLASS="main1">DAN'S</div><div class="main2">Programming Tutorials</DIV>
+<br>
+<TABLE WIDTH="700" BORDER="0" CELLPADDING="5" CELLSPACING="0">
+<TR><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+[</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="index.shtml">news</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+tutorials</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<!--A HREF="Files.shtml"--><!--files</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<a href="ResourcesWeb.shtml">links</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="Contact.shtml">contact</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+]</B></FONT>
+</TD></TR>
+</TABLE>
+-->
+<BR>
+
+<TABLE WIDTH="700" BORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="CENTER" VALIGN="TOP">
+
+<TR>
+<TD VALIGN="top" ALIGN="left" WIDTH="200">
+
+<TABLE WIDTH="200" BORDER="1" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver" ALIGN="center">
+<FONT FACE="arial" COLOR="black"><B>Table of Contents</B></FONT>
+</TD></TR>
+</TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="3" CELLSPACING="0"><TR><TD>
+<FONT FACE="arial" SIZE="-1">
+<BR>
+<CENTER><B>3D</B></CENTER>
+Creating a cutting-edge engine<BR>
+ &nbsp; <A HREF="Engine01.shtml">01 - Design document</A><BR>
+ &nbsp; <A HREF="Engine02.shtml">02 - Overall structure</A><BR>
+<BR>
+ &nbsp; <A HREF="Engine03.shtml">03 - Binary Space Partitioning</A><BR>
+ &nbsp; <A HREF="Engine04.shtml">04 - Constrctive Solid Geometry</A><BR>
+ &nbsp; <A HREF="Engine05.shtml">05 - Portals</A><BR>
+ &nbsp; <A HREF="Engine06.shtml">06 - Possible Visible Set</A><BR>
+ &nbsp; <A HREF="Engine07.shtml">07 - Radiosity lighting</A><BR>
+ &nbsp; <!--A HREF="Engine08.shtml"-->08 - Mirrors</A><BR>
+<BR>
+<!--A HREF="Dictionary.shtml"-->Dictionary of 3D terms</A><BR>
+<BR>
+<CENTER><B>OTHER</B></CENTER>
+<!--A HREF="GeneticAlgorithm.shtml"-->A Genetic Algorithm</A><BR>
+<A HREF="Line01.shtml">Line drawing</a><BR>
+<!--A HREF="Line02.shtml"-->Line clipping</a><BR>
+<!--A HREF="Line03.shtml"-->Line antialiasing</a><BR>
+<!--A HREF="Line04.shtml"-->Line thickening</a><BR>
+<!--A HREF="Line05.shtml"-->Line curving</a><BR>
+<br>
+<A HREF="ResourcesPrint.shtml">Resources in print</A><BR>
+<A HREF="ResourcesWeb.shtml">Resources on the web</A><BR>
+<!--A HREF="ResourcesFiles.shtml"-->Resources to download</A><BR>
+<BR>
+</FONT>
+</TD></TR></TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR><TD HEIGHT="155"></TD></TR>
+<TR><TD ALIGN="left"><FONT FACE="arial" SIZE="-2">
+<B>Bad</B>: see shamon<BR>
+<IMG SRC="michaelj.jpg" WIDTH="100" HEIGHT="124" ALT="Hee hee!"><BR>
+</FONT>
+</TD></TR>
+</TABLE>
+</TD>
+<TD VALIGN="top" ALIGN="right" WIDTH="500">
+
+<TABLE WIDTH="475" BORDER="0" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver">
+<FONT FACE="arial"><B>02 - Overall structure</B></FONT>
+</TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-1">
+The overall structure of your program is absolutely crucial and must be thought out even before you
+ start up the IDE/text editor/stone table and chisel.  As it is said in <A HREF="../tao.html">The Tao
+ of Programming</A>:
+<BLOCKQUOTE>"When I first began to program I would see before me
+the whole program in one mass.  After three years I no longer saw
+this mass. Instead, I saw subroutines.  Now I see nothing."</BLOCKQUOTE>
+What it means is that once you develop the intuitive understanding you will auto magically take into
+ consideration the overall structure and work with the flow, thus making your life a lot easier.<BR>
+<BR>
+If you're a self taught programmer then it's very likely no one ever taught you how to structure your
+ software code.  Well today you're in luck, 'cause I'm going to let the secret out.  <I>ALL</I>
+ programs, to one degree or another, have the same fundamental parts:<BR>
+<UL>
+<LI><B>The Model</B> is the set of all data that you are manipulating in the program.  In the case of
+ a 3D engine it would include the world model, the sprites, the motion paths, the sound effects, the
+ world events, etc...  Properly designed, (IMHO) the model shouldn't have to contain any
+ platform-specific code.
+<LI><B>The Graphic User Interface (GUI)</B> is all parts of the program that provide an interface with
+ the user.  In the simplest case it's a command prompt.  In our case it's probably a full screen,
+ multimedia extravaganza with fully configurable input devices and a plethora of different rendering
+ and sound systems.  Simply put, it's a user-friendly way of drawing the polys and playing the sounds.
+<LI><B>The Controller</B> is the part of the program that provides a connection between the GUI and the
+ model.  It is the entry point into the program and basically runs the whole show.
+</UL>
+Each of these sections should be as independent of each other as possible.  In other words the GUI
+ should never call the model, the model should never call the GUI and neither should call the controller.
+ It may turn out that it is unavoidable, but try your damnest not to break this rule because if you do
+ you develop a <I>cyclic dependency</I> which is BAD.<BR>
+<BR>
+At the time I wrote this page, my engine structure looked, in part, like this:<BR>
+<BR>
+<p align="center">
+<IMG SRC="0201.jpg" WIDTH="470" HEIGHT="471" ALT="zViewer engine design" BORDER="0"><BR>
+</center>
+<BR>
+Which is nothing compared to my original idea:<BR>
+<BR>
+<p align="center">
+<IMG SRC="0202.jpg" WIDTH="350" HEIGHT="350" ALT="zViewer original engine design" BORDER="0"><BR>
+</p>
+<BR>
+Technically speaking you <I>should</I> develop the controller, then the model, then the GUI.  However,
+ reality says you should test at various stages so you have to develop each <i>in part
+ simultaneously</i>. It would be very very difficult to develop first one and then the other.  Ever
+ try to debug 500k of code?  Two words:  nervous breakdown.<BR>
+<BR>
+But enough of all these preliminaries, let's skip to the last chapter and learn something really
+ mind blowing!<BR>
+<BR>
+<a href="#top">Back to the top</a>
+<hr>
+<B>PREV: <A HREF="Engine01.shtml">The Design document</A></B><BR>
+<B>NEXT: <A HREF="Engine03.shtml">Binary Space Partitioning</A></B><BR>
+<BR><br></FONT>
+</TD></TR></TABLE>
+</TD>
+</TR>
+
+</TABLE>
+
+<HR ALIGN="CENTER" SIZE="1" WIDTH="700" NOSHADE>
+<FONT FACE="arial" SIZE="-2">All photos copyright of their respective owners.  All other content of this website is &copy; 1997-1999 Dan Royer.<BR>
+Designed for IE 5.0+, 800x600x16 or greater.  Some pages use style sheets.<br>
+<A HREF="http://members.home.com/droyer/index.html"
+   TITLE="Dan's Homepage">http://members.home.com/droyer/index.html</A><br>
+</FONT>
+
+</CENTER>
+<BR>
+<BR>
+
+</BODY>
+</HTML>
+</HTML>

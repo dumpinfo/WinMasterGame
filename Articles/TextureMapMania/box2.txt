@@ -1,0 +1,8 @@
+Texture Mapping Demo Instructions
+
+Controls
+
+<A> - Zoom out.
+<Z> - Zoom in.
+Arrows - Rotate up/down.
+

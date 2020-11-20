@@ -1,0 +1,284 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Dan's Tutorials: 06 - Possible Visible Set</title>
+	<LINK REL="stylesheet" HREF="tutorial_styles.css">
+</head>
+
+<BODY BGCOLOR="white">
+<a name="top"></a>
+<BR>
+<CENTER>
+<!--
+<br>
+<DIV CLASS="main1">DAN'S</div><div class="main2">Programming Tutorials</DIV>
+<br>
+<TABLE WIDTH="700" BORDER="0" CELLPADDING="5" CELLSPACING="0">
+<TR><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+[</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="index.shtml">news</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+tutorials</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<!--A HREF="Files.shtml"--><!--files</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<a href="ResourcesWeb.shtml">links</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="Contact.shtml">contact</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+]</B></FONT>
+</TD></TR>
+</TABLE>
+-->
+<BR>
+
+<TABLE WIDTH="700" BORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="CENTER" VALIGN="TOP">
+
+<tr>
+<td valign="top" align="left" width="200">
+
+<TABLE WIDTH="200" BORDER="1" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver" ALIGN="center">
+<FONT FACE="arial" COLOR="black"><B>Table of Contents</B></FONT>
+</TD></TR>
+</TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="3" CELLSPACING="0"><TR><TD>
+<FONT FACE="arial" SIZE="-1">
+<BR>
+<CENTER><B>3D</B></CENTER>
+Creating a cutting-edge engine<BR>
+ &nbsp; <A HREF="Engine01.shtml">01 - Design document</A><BR>
+ &nbsp; <A HREF="Engine02.shtml">02 - Overall structure</A><BR>
+<BR>
+ &nbsp; <A HREF="Engine03.shtml">03 - Binary Space Partitioning</A><BR>
+ &nbsp; <A HREF="Engine04.shtml">04 - Constrctive Solid Geometry</A><BR>
+ &nbsp; <A HREF="Engine05.shtml">05 - Portals</A><BR>
+ &nbsp; <A HREF="Engine06.shtml">06 - Possible Visible Set</A><BR>
+ &nbsp; <A HREF="Engine07.shtml">07 - Radiosity lighting</A><BR>
+ &nbsp; <!--A HREF="Engine08.shtml"-->08 - Mirrors</A><BR>
+<BR>
+<!--A HREF="Dictionary.shtml"-->Dictionary of 3D terms</A><BR>
+<BR>
+<CENTER><B>OTHER</B></CENTER>
+<!--A HREF="GeneticAlgorithm.shtml"-->A Genetic Algorithm</A><BR>
+<A HREF="Line01.shtml">Line drawing</a><BR>
+<!--A HREF="Line02.shtml"-->Line clipping</a><BR>
+<!--A HREF="Line03.shtml"-->Line antialiasing</a><BR>
+<!--A HREF="Line04.shtml"-->Line thickening</a><BR>
+<!--A HREF="Line05.shtml"-->Line curving</a><BR>
+<br>
+<A HREF="ResourcesPrint.shtml">Resources in print</A><BR>
+<A HREF="ResourcesWeb.shtml">Resources on the web</A><BR>
+<!--A HREF="ResourcesFiles.shtml"-->Resources to download</A><BR>
+<BR>
+</FONT>
+</TD></TR></TABLE>
+
+</td>
+<td valign="top" align="right" width="500">
+
+<table width="475" border="0" cellpadding="3" cellspacing="0">
+<tr><td bgcolor="silver">
+<font face="arial"><b>06 - Possible Visible Set</b></font>
+</td></tr>
+<tr><td><font face="arial" size="-1">
+Here is where I'll write about Possible Visible Set and how it is calculated.  Then I'll go into the
+ optimizations, RLE the PVS list and lastly appologize for not yet understanding how non-occluders
+ are implemented.<br>
+<br>
+Possible Visible Set (PVS) is the set of all areas visible from this area.  In BSP terms, it's the set
+ of all interior leaf nodes visible from any other interior leaf node.  If you know this list then you
+ can stop trying to draw certain portions of the tree because you know that portion will be drawn over
+ or clipped and thus turn into a huge waste of time.  And since BSP models almost never change shape,
+ you can save even more time by precalculating the list.  The whole idea is just to save as much as
+ possible when rendering, even if it involves a certain ammount of work ahead of time.<br>
+<br>
+Now, most of you are probably thinking about the problem of how to calculate the list.  You might
+ consider casting "rays" outward from each node and seeing if the ray passes uncut into every other
+ node.  This has a few big flaws:  how can you be sure something small and really far away doesn't fall
+ between rays?  Ok, you could test against every vertex in every other node.  How do you find a spot in
+ your starting node from which you can see into all the other possible nodes?  There are just too many
+ cases to consider.  What we need is a way to cover the entire area visible between any two nodes.<br>
+<br>
+
+Solution: Portals!  Consider a set of portals generated from a simple BSP.
+<br>
+<br>
+<center><img src="0501.jpg" width="300" height="200" alt="A simple set of portals" border="0"></center>
+<br>
+If you were standing in section 1 you could see into everything except leaf nodes 7 and 8.  The same
+ is also true in reverse.  Now let's consider the portals and how they play their part.<br>
+<br>
+<i>Penumbra</i> is the shadow cast by something when a light is shone on it.  <i>Antipenumbra</i> is
+ the exact opposite, something like shining a light through a piece of paper with an oddly shaped hole
+ cut in it.  the antipenumbra of any one portal through any other portal tells us which of <i>all the
+ other portals</i> is visible when looking in that direction.<Br>
+<br>
+<center><img src="0601.jpg" width="200" height="100" alt="antipenumbra example" border="0"></center>
+<br>
+Since all portals are sandwiched between two nodes, if a generator portal is within the antipenumbra of
+ a source and target portal then the nodes touching the source, generator and target can all "see" each
+ other.  But what's the fastest way to figure out which portals lie in the antipenumbras of other
+ source/target combinations?  What if a node has more than one portal?  What about the possibility of
+ one portal seeing into another and another <i>and then another</i>?  EEEP!<br>
+<br>
+Once again, recursion comes to our aide.  The pseudocode would go a little like this.<br>
+</font><pre>
+for( every node 'gSourceNode' ) {
+  gSourceNode.PVSMarkVisible( gSourceNode ).
+  for( all portals touching gSourceNode 'sourcePortal' ) {
+    for( all nodes touching sourcePortal 'targetNode' ) {
+      if( targetNode == gSourceNode ) continue;
+	  gSourceNode.PVSMarkVisible( targetNode );
+      <font color="green">// Since targetNode is convex (a rule of BSPs)
+      // all target portals must be visible from
+	  // sourceNode.</font>
+      for( all portals touching targetNode
+         'targetPortal' ) {
+        <font color="green">// Eliminate trivial cases.</font>
+        if( targetPortal == sourcePortal ) continue;
+        if( targetPortal and sourcePortal are
+            coplanar ) continue;
+        RecursePVS( targetNode,
+          targetPortal,
+          sourcePortal );
+      }
+    }
+  }
+}
+
+
+Recurse( targetNode, targetPortal, sourcePortal ) {
+  generatorNode = targetPortal.GetNode()  that is not
+                  targetNode.
+  gSourceNode.PVSMarkVisible( generatorNode );
+  for( all portals touching generatorNode 
+      'generatorPortal' ) {
+    <font color="green">// Eliminate trivial cases.</font>
+    if( generatorPortal == targetPortal ) continue;
+    if( generatorPortal on the gSourceNode side
+        of sourcePortal ) continue;
+    if( generatorPortal on the targetPortal side
+        of targetPortal ) continue;
+    <font color="green">// This is the tricky part.</font>
+    newGenPortals += AntiPenumbraClip( generatorPortal,
+        targetPortal, sourcePortal );
+    newSrcPortals += AntiPenumbraClip( sourcePortal,
+        targetPortal, generatorPortal );
+    <font color="green">// If anything is still visible, we have to recurse.
+    // This is what makes it memory expensive.</font>
+    if( !newGenPortals || !newSrcPortals ) continue;
+    for( all newSrcPortals 'nsp' ) {
+      for( all newGenPortals 'ngp' ) {
+        Recurse( ngp, generatorNode, nsp );
+      }
+    }
+    delete all nsp and ngp.
+  }
+}
+</pre><font face="arial" size="-1">
+Easier to show than explain, I guarantee you that.  The next major step is to determine how to calculate
+ the antipenumbra.  Suprisingly, this was the easiest part to code and I got it on the first try.  That
+ or it's 'cause I'm just so damn good.  Now to convince the rest of the world...<br>
+<br>
+Anyhow, the antipenumbra is really simple:  take one point from the source portal and two from the
+ target.  Build a plane and then make sure that the source portal is COMPLETELY on one side and the
+ target is COMPLETELY on the other.  Clip the generator to this new plane and eliminate any portal
+ fragment that ends on the same side as the source portal.  This new plane is the limit of what could
+ be seen looking through the opposite-most edges of the source/target portals.  Since we're going all
+ the way around the source and the target, it's equivalent to clipping out everything that cannot be
+ seen through the source and target portals.<br>
+<br>
+Next I repeated the process with one point from target and two points from source just to shave off
+ every little piece I could.  Then I <b>reversed</b> the whole process and clipped the source against
+ the generator and the target antipenumbra.  Why?  So that at the next recursive step the source would
+ be that much smaller, the antipenumbra would be more narrow and there would be an even better chance
+ of entirely clipping the next generator.<br>
+<br>
+<hr>
+<br>
+Now don't be suprised if this whole process dosen't work on the first try.  Some things I can reccomend
+ to speed up debugging include:<br>
+<ul>
+<li><b>Limit recursion depth</b> by creating a static global counter.  Each time Recurse is called,
+ increment the counter.  If it hits a certain depth, return immediately.  Watch out though, this number
+ should be <i>very</i> low, no more than 8 or 9.  Remember, the ammount of recursion has a potential
+ order of (number of portals<sup>number of portals</sup>), each layer being (number of portals *
+ number of portals) which is nothing short of a lot.
+<li><b>Make lots of run-time file output</b> because it can't hurt.  When I did this I made a pleasant
+ discovery: the printout of all nodes and their PVS lists forms an n*n matrix that is symmetrical along
+ the diagonal.
+<li><b>Use small test models</b>.  I used two models to test.  The first was three cubes, the middle
+ cube being offset from the others along one axis.  It looked a little like a shallow 'c'.  The second
+ was a symmetrical map of four large rooms connected to each other by long hallways so that from any
+ room or hallway you could only see two rooms and two hallways.  I really liked this one because I could
+ them move the camera "up" until I went through the "ceiling" and, since I was still in the same leaf
+ node, I could see that the other half of the model was not being drawn.
+</ul>
+<br>
+<hr>
+<br>
+Finally, there are a few things you can do to optimize memory consumption.  Every node is either visible
+ or not visible to some other node.  This means you only need one bit in computer ram to store the
+ visibility flag.  Thus with some clever bit shifting a single <font color="blue">unsigned char</font>
+ can store 8 node's worth of PVS data.  Congratulations, you are now using 76.5% less ram.  Another
+ technique would be to use only PVS lists that are different from one another, because there are bound
+ to be a few cases (such as my "shallow c" model) where several nodes "see" the same thing.  Note that 
+ run length encoding is another viable option, but I haven't tried it yet so I can't attest to it's
+ pitfalls or benefits.<br>
+<br>
+But if that's true, why not just calculate one PVS list for all of them in the first place and save time
+ building the list?!  Ah ha, you're talking about non-occluders.  Imagine a very narrow pole running up
+ the middle of a hollow cube.  The polygons of the pole will split the world in to no fewer than four
+ interior leaf nodes but they will <i>all</i> have the same PVS list.  There must be a way to somehow
+ ignore that pole's effect on the world.  Well, you're right.<br>
+<br>
+<p align="right">But I don't know it yet.  *sigh*.</p>
+<hr>
+<br>
+So what have we covered?  PVS, PVS and more PVS.  With PVS on the side and a dash of PVS for seasoning.
+ No, seriously, we've taken our previous knowledge or portals and built upon it to come up with a
+ pretty neat-o way of precalculating the possible visible set and thus reduce the ammount of work done
+ each frame thus increasing framerates.  We've covered Antipenumbras, debugging techniques and
+ optimizations such as compacting the PVS list.<br>
+<br>
+If you've made it this far, I have to shake your hand.  Not many make it this far, so reach back and
+ pat that slowly forming hump. But not too much, because now that you've pushed framerates way WAY up,
+ you have enough extra time each frame to add <i>ba-ba-ba-BUM</i> <b>LIGHTMAPS!</b><br>
+<br>
+<a href="#top">Back to the top</a>
+<hr>
+<b>PREV: <a href="Engine05.shtml">Portals</a></b><br>
+<b>NEXT: <a href="Engine07.shtml">Radiosity lighting</a></b><br>
+<br></font>
+</td></tr></table>
+</td>
+</tr>
+
+</TABLE>
+
+<HR ALIGN="CENTER" SIZE="1" WIDTH="700" NOSHADE>
+<FONT FACE="arial" SIZE="-2">All photos copyright of their respective owners.  All other content of this website is &copy; 1997-1999 Dan Royer.<BR>
+Designed for IE 5.0+, 800x600x16 or greater.  Some pages use style sheets.<br>
+<A HREF="http://members.home.com/droyer/index.html"
+   TITLE="Dan's Homepage">http://members.home.com/droyer/index.html</A><br>
+</FONT>
+
+</CENTER>
+<BR>
+<BR>
+
+</BODY>
+</HTML>
+</html>

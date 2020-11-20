@@ -1,0 +1,381 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<HTML>
+<HEAD>
+	<TITLE>Dan's Tutorials: 03 - Binary Space Partitioning</TITLE>
+	<LINK REL="stylesheet" HREF="tutorial_styles.css">
+</HEAD>
+
+<BODY BGCOLOR="white">
+<a name="top"></a>
+<BR>
+<CENTER>
+<!--
+<br>
+<DIV CLASS="main1">DAN'S</div><div class="main2">Programming Tutorials</DIV>
+<br>
+<TABLE WIDTH="700" BORDER="0" CELLPADDING="5" CELLSPACING="0">
+<TR><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+[</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="index.shtml">news</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+tutorials</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<!--A HREF="Files.shtml"--><!--files</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<a href="ResourcesWeb.shtml">links</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="Contact.shtml">contact</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+]</B></FONT>
+</TD></TR>
+</TABLE>
+-->
+<BR>
+
+<TABLE WIDTH="700" BORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="CENTER" VALIGN="TOP">
+
+<TR>
+<TD VALIGN="top" ALIGN="left" WIDTH="200">
+
+<TABLE WIDTH="200" BORDER="1" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver" ALIGN="center">
+<FONT FACE="arial" COLOR="black"><B>Table of Contents</B></FONT>
+</TD></TR>
+</TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="3" CELLSPACING="0"><TR><TD>
+<FONT FACE="arial" SIZE="-1">
+<BR>
+<CENTER><B>3D</B></CENTER>
+Creating a cutting-edge engine<BR>
+ &nbsp; <A HREF="Engine01.shtml">01 - Design document</A><BR>
+ &nbsp; <A HREF="Engine02.shtml">02 - Overall structure</A><BR>
+<BR>
+ &nbsp; <A HREF="Engine03.shtml">03 - Binary Space Partitioning</A><BR>
+ &nbsp; <A HREF="Engine04.shtml">04 - Constrctive Solid Geometry</A><BR>
+ &nbsp; <A HREF="Engine05.shtml">05 - Portals</A><BR>
+ &nbsp; <A HREF="Engine06.shtml">06 - Possible Visible Set</A><BR>
+ &nbsp; <A HREF="Engine07.shtml">07 - Radiosity lighting</A><BR>
+ &nbsp; <!--A HREF="Engine08.shtml"-->08 - Mirrors</A><BR>
+<BR>
+<!--A HREF="Dictionary.shtml"-->Dictionary of 3D terms</A><BR>
+<BR>
+<CENTER><B>OTHER</B></CENTER>
+<!--A HREF="GeneticAlgorithm.shtml"-->A Genetic Algorithm</A><BR>
+<A HREF="Line01.shtml">Line drawing</a><BR>
+<!--A HREF="Line02.shtml"-->Line clipping</a><BR>
+<!--A HREF="Line03.shtml"-->Line antialiasing</a><BR>
+<!--A HREF="Line04.shtml"-->Line thickening</a><BR>
+<!--A HREF="Line05.shtml"-->Line curving</a><BR>
+<br>
+<A HREF="ResourcesPrint.shtml">Resources in print</A><BR>
+<A HREF="ResourcesWeb.shtml">Resources on the web</A><BR>
+<!--A HREF="ResourcesFiles.shtml"-->Resources to download</A><BR>
+<BR>
+</FONT>
+</TD></TR></TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR><TD HEIGHT="290"></TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-2">
+zViewer: The greatest thing since sliced bread.  Except butter.</FONT></TD></TR>
+<TR><TD HEIGHT="75"></TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-2">1:
+ <A HREF="Resources.shtml#CGPAP">Computer Graphics: Principles & Practice</A></FONT></TD></TR>
+<TR><TD HEIGHT="360"></TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-2">
+Time to build a BSP tree: 0(n<SUP>2</SUP>)<BR><BR>
+Time to walk a BSP tree: 0(n)</FONT></TD></TR>
+<TR><TD HEIGHT="420"></TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-2">Leaf node:
+ the last node on each branch of a BSP tree.</FONT></TD></TR>
+<TR><TD HEIGHT="90"></TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-2">Method:<BR>
+<FONT COLOR="blue">void</FONT> MyMethod() {<BR>
+ &nbsp; ...<BR>
+}<BR>
+<BR>
+Function:<BR>
+A<SUB>1</SUB>x<SUP>1</SUP> + A<SUB>2</SUB>x<SUP>2</SUP> + ... + A<SUB>n</SUB>x<SUP>n</SUP> = 0<br>
+<br>
+Get it straight, people.</FONT></TD></TR>
+<TR><TD HEIGHT="260"></TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-2">Get back, funky cat.<br>
+<img src="eltonj.jpg" width="100" height="156" alt="Crocodile Rock" border="0"></FONT></TD></TR>
+<TR><TD HEIGHT="700"></TD></TR>
+<TR><TD><img src="popup.jpg" width=100 height=125 alt="Is it just me?" border="0"></TD></TR>
+</TABLE>
+</TD>
+<TD VALIGN="top" ALIGN="right" WIDTH="500">
+
+<TABLE WIDTH="475" BORDER="0" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver">
+<FONT FACE="arial"><B>03 - Binary Space Partitioning</B></FONT>
+</TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-1">
+One of the largest problems when rendering large polygon sets has to do with the order in which the
+ polygons are supposed to be drawn.  What I mean is that you have to have a really fast way of sorting
+ the polygons so that you can draw the polygons closest to the camera on top of the polygons that are
+ further back.  Better still would be to have <I>zero overdraw</I>, by that I mean you wouldn't draw
+ over anything and every pixel would be touched just once.<BR>
+<BR>
+<p align="center">
+<IMG SRC="0301.jpg" WIDTH="200" HEIGHT="150" ALT="top view" BORDER="0">
+ &nbsp; <IMG SRC="0302.jpg" WIDTH="200" HEIGHT="150" ALT="camera view" BORDER="0">
+</p>
+<BR>
+There are a number of different ways of going about polygon sorting.  Some of simplest include
+ the Painter's algorithm and Z-buffering.  Portals are (among other things) another very handy way to
+ ensure front to back zero overdraw but we'll discuss those later.<BR>
+<BR>
+Binary Space Partitioning trees (BSPs) are very good at a number of things.<BR>
+<UL>
+<LI><B>Z-sorting polygons</B> so that they draw in the right order.
+<LI><B>Collision detection</B> against BSP planes is very quick and easy.  It's just as easy to
+ determine if you are inside our outside of a model represented by BSP.
+<LI><B>Fast rendering</B> can be quickly accomplished because the BSP is built ahead of time.  For those
+ of you mathematically inclined, the total time to walk the tree is O(n) while the time to build the
+ tree is O(n<SUP>2</SUP>).
+<LI><B>Node clipping</B> is another precalculated BSP trick to improve rendering speed.
+<LI><B>The Possible Visible Set</B> can be calculated with the BSP tree to reduce rendering time even
+ further.
+</UL>
+If that isn't enough to convince you of the advantages, then maybe this is:
+<TABLE BORDER="0">
+<TR><TD><FONT FACE="arial" SIZE="-1">
+<UL>
+<LI><A HREF="http://www.idsoftware.com">Doom</A>
+<LI><A HREF="http://www.idsoftware.com">Doom II</A>
+<LI><A HREF="http://www.idsoftware.com">Quake</A>
+<LI><A HREF="http://www.idsoftware.com">Quake II</A>
+<LI><A HREF="http://www.quake3arena.com">Quake III: Arena</A>
+</UL></FONT>
+</TD><TD><FONT FACE="arial" SIZE="-1">
+<UL>
+<LI><A HREF="http://www.unreal.com">Unreal</A>
+<LI><A HREF="http://www.sin.com">Sin</A>
+<LI><A HREF="http://www.shogo.com">Shogo</A>
+<LI><A HREF="http://www.valvesoftware.com/halflife">Half-Life</A>
+<LI><A HREF="../zeditor">zViewer</A>
+</UL></FONT>
+</TD></TR>
+</TABLE>
+All of these programs use BSPs.  "So how," you're asking yourself, "do I jump on the BSP bandwagon?"
+ Easier said than done.<BR>
+<BR>
+First of all, here's how they work:  BSPs "recursively divide space into pairs of sub spaces, each
+ separated by a plane of arbitrary orientation and position."<SUP>1</SUP>  It's easier to visualize.
+ Let's say we're given an arbitrary set of polygons.  We'll use the planes of the polygons to cut the
+ world in half, or as close to half as we can find.  The first step would look like this:<BR>
+<BR>
+<p align="center">
+<IMG SRC="0303.jpg" WIDTH="200" HEIGHT="150" ALT="the first division" BORDER="0">
+ &nbsp; <IMG SRC="0304.jpg" WIDTH="200" HEIGHT="150" ALT="the start of the tree" BORDER="0">
+</p><BR>
+Recurse on both sides until there are no polygons left.<BR>
+<BR>
+<p align="center">
+<IMG SRC="0305.jpg" WIDTH="200" HEIGHT="150" ALT="a node-based world" BORDER="0">
+ &nbsp; <IMG SRC="0306.jpg" WIDTH="200" HEIGHT="150" ALT="a node-based tree" BORDER="0">
+</p><BR>
+This is what is referred to as <I>node-based</I> because the polygons are on the nodes.  The other type
+ of tree is a <I>leaf-based</I> tree and looks like this:<BR>
+<BR>
+<p align="center">
+<IMG SRC="0307.jpg" WIDTH="200" HEIGHT="150" ALT="a leaf-based world" BORDER="0">
+ &nbsp; <IMG SRC="0308.jpg" WIDTH="200" HEIGHT="150" ALT="a leaf-based tree" BORDER="0">
+</p><BR>
+Notice a few important things:<BR>
+<UL>
+<LI>In both cases every node obtained a plane from a polygon.  This isn't
+ strictly crucial, but it's a lot faster than trying to find an arbitrary plane.
+<LI>The area in front of and behind every node is a convex space.  This will come in handy later.
+<LI>The front portion of every LEAF NODE is of a finite volume.  This too, will be very useful later.
+<LI>If the best dividing plane cuts through a polygon, the polygon is cut in half and each half is then
+ used in the appropriate recursion.
+</UL>
+Now that's all well and good, but how do you code it?  Tsk tsk.  That will be your homework for the
+ weekend, which is about how long it took me to write my first BSP building METHOD.  No, I Jest.  here's
+ some code for building the node-based BSP tree from a set of polygons.<br>
+</FONT>
+<pre>
+<FONT COLOR="Green">/* BuildTree( cPolygon *pList )
+ * Given a linked list of polygons BuildTree finds the
+ * best dividing plane and then cuts the entire set
+ * based on that plane.  If there is anything left in
+ * either half, the function recurses "down" that
+ * branch of the tree.  Returns a success code.
+ */</FONT>
+eNodeReturn cNode<FONT COLOR="Navy">::</FONT>BuildTree<FONT COLOR="Navy">(</FONT> cPolygon <FONT COLOR="Navy">*</FONT>pList <FONT COLOR="Navy">) {</FONT>
+  cPolygon <FONT COLOR="Navy">*</FONT>pBestDivider<FONT COLOR="Navy">,</FONT> <FONT COLOR="Navy">*</FONT>pTest<FONT COLOR="Navy">,</FONT>
+           <FONT COLOR="Navy">*</FONT>pInsideList<FONT COLOR="Navy">,</FONT> <FONT COLOR="Navy">*</FONT>pOutsideList<FONT COLOR="Navy">;</FONT>
+
+  pInsideList <FONT COLOR="Navy">=</FONT> NULL<FONT COLOR="Navy">;</FONT>
+  pOutsideList <FONT COLOR="Navy">=</FONT> NULL<FONT COLOR="Navy">;</FONT>
+  pBestDivider <FONT COLOR="Navy">=</FONT> FindBestDivider<FONT COLOR="Navy">(</FONT> pList <FONT COLOR="Navy">);</FONT>
+  <FONT COLOR="Green">// pPlane is a member of cNode.</FONT>
+  pPlane <FONT COLOR="Navy">=</FONT> pBestDivider<FONT COLOR="Navy">-></FONT>GetPlane<FONT COLOR="Navy">();</FONT>
+  for<FONT COLOR="Navy">(</FONT> pTest <FONT COLOR="Navy">=</FONT> pList<FONT COLOR="Navy">;</FONT> pTest<FONT COLOR="Navy">;</FONT> pTest <FONT COLOR="Navy">=</FONT> pTest<FONT COLOR="Navy">-></FONT>Next<FONT COLOR="Navy">() ) {</FONT>
+    <FONT COLOR="Green">// Test each polygon against the plane
+    // and put them in the appropriate list.</FONT>
+    <FONT COLOR="blue">switch</FONT><FONT COLOR="Navy">(</FONT> pTest<FONT COLOR="Navy">-></FONT>TestAgainstPlane<FONT COLOR="Navy">(</FONT> pPlane <FONT COLOR="Navy">) ) {</FONT>
+      <FONT COLOR="blue">case</FONT> ZV_PLANE_BACK<FONT COLOR="Navy">:</FONT>
+        <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> !pInsideList <FONT COLOR="Navy">)</FONT> pInsideList <FONT COLOR="Navy">=</FONT> pTest<FONT COLOR="Navy">;</FONT>
+        <FONT COLOR="blue">else</FONT> pTest<FONT COLOR="Navy">-></FONT>Link<FONT COLOR="Navy">(</FONT> pInsideList <FONT COLOR="Navy">);</FONT>
+        <FONT COLOR="blue">break</FONT><FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="blue">case</FONT> ZV_PLANE_FRONT<FONT COLOR="Navy">:</FONT>
+        <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> !pOutsideList <FONT COLOR="Navy">)</FONT> pOutsideList <FONT COLOR="Navy">=</FONT> pTest<FONT COLOR="Navy">;</FONT>
+        <FONT COLOR="blue">else</FONT> pTest<FONT COLOR="Navy">-></FONT>Link<FONT COLOR="Navy">(</FONT> pOutsideList <FONT COLOR="Navy">);</FONT>
+        <FONT COLOR="blue">break</FONT><FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="blue">case</FONT> ZV_PLANE_ON<FONT COLOR="Navy">:</FONT>
+        <FONT COLOR="Green">// pPolygons is a member of cNode.</FONT>
+        <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> !pPolygons <FONT COLOR="Navy">)</FONT> pPolygons <FONT COLOR="Navy">=</FONT> pTest<FONT COLOR="Navy">;</FONT>
+        <FONT COLOR="blue">else</FONT> pTest<FONT COLOR="Navy">-></FONT>Link<FONT COLOR="Navy">(</FONT> pPolygons <FONT COLOR="Navy">);</FONT>
+        <FONT COLOR="blue">break</FONT><FONT COLOR="Navy">;</FONT>
+      <FONT COLOR="blue">case</FONT> ZV_PLANE_SPLIT<FONT COLOR="Navy">:</FONT>
+        cPolygon <FONT COLOR="Navy">*</FONT>pIn<FONT COLOR="Navy">,</FONT> <FONT COLOR="Navy">*</FONT>pOut<FONT COLOR="Navy">;</FONT>
+
+        pTest<FONT COLOR="Navy">-></FONT>Split<FONT COLOR="Navy">(</FONT> pPlane<FONT COLOR="Navy">, & </FONT>pIn<FONT COLOR="Navy">, & </FONT>pOut <FONT COLOR="Navy">);</FONT>
+        <FONT COLOR="Green">// check to make sure Split succeeded</FONT>
+        <FONT COLOR="blue">delete</FONT> pTest<FONT COLOR="Navy">;</FONT>
+        <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> !pInsideList <FONT COLOR="Navy">)</FONT> pInsideList <FONT COLOR="Navy">=</FONT> pIn<FONT COLOR="Navy">;</FONT>
+        <FONT COLOR="blue">else</FONT> pIn<FONT COLOR="Navy">-></FONT>Link<FONT COLOR="Navy">(</FONT> pInsideList <FONT COLOR="Navy">);</FONT>
+        <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> !pOutsideList <FONT COLOR="Navy">)</FONT> pOutsideList <FONT COLOR="Navy">=</FONT> pOut<FONT COLOR="Navy">;</FONT>
+        <FONT COLOR="blue">else</FONT> pOut<FONT COLOR="Navy">-></FONT>Link<FONT COLOR="Navy">(</FONT> pOutsideList <FONT COLOR="Navy">);</FONT>
+        <FONT COLOR="blue">break</FONT><FONT COLOR="Navy">;</FONT>
+    <FONT COLOR="Navy">}</FONT>
+  <FONT COLOR="Navy">}</FONT>
+
+  <FONT COLOR="Green">// Recurse, if necessary.
+  // pInside and pOutside are members of cNode.</FONT>
+  <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> pInsideList <FONT COLOR="Navy">) {</FONT>
+    pInside = <FONT COLOR="blue">new</FONT> cNode<FONT COLOR="Navy">();</FONT>
+    <FONT COLOR="Green">// check to see if pInside exists</FONT>
+    pInside->BuildTree<FONT COLOR="Navy">(</FONT> pInsideList <FONT COLOR="Navy">);</FONT>
+    <FONT COLOR="Green">// check to make sure BuildTree succeeded</FONT>
+  <FONT COLOR="Navy">}</FONT>
+  <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> pOutsideList <FONT COLOR="Navy">) {</FONT>
+    pOutside = <FONT COLOR="blue">new</FONT> cNode<FONT COLOR="Navy">();</FONT>
+    <FONT COLOR="Green">// check to see if pOutside exists</FONT>
+    pOutside>BuildTree<FONT COLOR="Navy">(</FONT> pOutsideList <FONT COLOR="Navy">);</FONT>
+    <FONT COLOR="Green">// check to make sure BuildTree succeeded</FONT>
+  <FONT COLOR="Navy">}</FONT>
+  <FONT COLOR="blue">return</FONT> ZV_NODE_OK<FONT COLOR="Navy">;</FONT>
+<FONT COLOR="Navy">}</FONT>
+</pre>
+<FONT face="arial" size="-1">Thought that was rough?  The first time is always the worst.  Nowadays I
+ can do this in my sleep and I'm sure you will too in no time at all.  Of course, you still have to
+ fill in the blanks and that, as they say, is another story.  But it's going to be worth it, oh yes!
+ Let me show you just how easy it is to render using BSPs.<BR>
+</FONT>
+<PRE>
+<FONT COLOR="Green">/* RenderTree( pCamera *pCam )
+ * Recursively calls all the nodes in the tree
+ * and renders them.  The tree is "walked" from
+ * back to front to ensure proper polygon ordering.
+ * This method will work with both leaf and node
+ * based trees.
+ */</FONT>
+<FONT COLOR="blue">void</FONT> cNode<FONT COLOR="Navy">::</FONT>RenderTree<FONT COLOR="Navy">(</FONT> cCamera <FONT COLOR="Navy">*</FONT>pCam <FONT COLOR="Navy">) {</FONT>
+  <FONT COLOR="blue">int</FONT> result<FONT COLOR="Navy">;</FONT>
+  
+  result <FONT COLOR="Navy">=</FONT> ClipToCamera<FONT COLOR="Navy">(</FONT> pCam <FONT COLOR="Navy">);</FONT>
+  <FONT COLOR="blue">if</FONT><FONT COLOR="Navy">(</FONT> result <FONT COLOR="Navy">==</FONT> ZV_NODE_CULLED <FONT COLOR="Navy">)</FONT> <FONT COLOR="blue">return</FONT><FONT COLOR="Navy">;</FONT>
+
+  <FONT COLOR="blue">switch</FONT><FONT COLOR="Navy">(</FONT> result </FONT>pCam <FONT COLOR="Navy">) {</FONT>
+    <FONT COLOR="blue">case</FONT> ZV_NODE_FRONT<FONT COLOR="Navy">:</FONT>
+      <FONT COLOR="Green">// Camera is in front of this node's plane</FONT>
+      pOutside<FONT COLOR="Navy">-></FONT>RenderTree<FONT COLOR="Navy">(</FONT> pCam <FONT COLOR="Navy">);</FONT>
+      RenderNode<FONT COLOR="Navy">(</FONT> pCam <FONT COLOR="Navy">);</FONT>  <FONT COLOR="Green">// render this node's polygons</FONT>
+      pInside<FONT COLOR="Navy">-></FONT>RenderTree<FONT COLOR="Navy">(</FONT> pCam <FONT COLOR="Navy">);</FONT>
+      <FONT COLOR="blue">break</FONT><FONT COLOR="Navy">;</FONT>
+    <FONT COLOR="blue">case</FONT> ZV_NODE_BACK<FONT COLOR="Navy">:</FONT>
+      <FONT COLOR="Green">// Camera is behind this node's plane</FONT>
+      pInside<FONT COLOR="Navy">-></FONT>RenderTree<FONT COLOR="Navy">(</FONT> pCam <FONT COLOR="Navy">);</FONT>
+      RenderNode<FONT COLOR="Navy">(</FONT> pCam <FONT COLOR="Navy">);</FONT>  <FONT COLOR="Green">// render this node's polygons</FONT>
+      pOutside<FONT COLOR="Navy">-></FONT>RenderTree<FONT COLOR="Navy">(</FONT> pCam <FONT COLOR="Navy">);</FONT>
+      <FONT COLOR="blue">break</FONT><FONT COLOR="Navy">;</FONT>
+  <FONT COLOR="Navy">}</FONT>
+<FONT COLOR="Navy">}</FONT>
+</PRE>
+<FONT FACE="arial" SIZE="-1">
+Now let's just say that you've got a <i>really</i> big tree somewhere in the hundreds of nodes and the
+ thousands of polygons.  BSPs will be great for drawing everything in the right order, but isn't there
+ any way to save us from trying to draw a whole bunch of stuff that won't be seen anyhow?  The answer
+ is yes, there are many.  For now let's start with something basic, node boundings.<br>
+<br>
+Bounding boxes and bounding spheres have been in use for ages.  The simplest bounding is a sphere that
+ encompasses a certain amount of stuff.  Four or Five really quick tests are all that you need to
+ determine if your camera can see the sphere and that tells you if you can see any of the stuff inside.
+ So how about a recursive function that walks through every node in the BSP tree and calculates the
+ smallest sphere needed to contain every part of the current node <b>and</b> it's leaves?  That way the
+ instant you discover that a node is outside the camera view you can stop walking that branch because
+ you know that none of it's leaves are visible, either.<br>
+<br>
+<hr>
+<br>
+Some tips for debugging your BSP building algorithm:<br>
+<ul>
+<li><b>Limit the depth of recursion</b> by using a static or global counter.  increment it every time
+ you descend the tree and subtract when you go back.  If the value gets to high, return immediately.
+ However, you have to be careful with this because the number of function calls is NOT linear with
+ the maximum value.  what I mean is this:  because every branch of the tree has two leaves it is very
+ possible that you have O(n<sup>2</sup>) calls to make.  So if you pick a depth of 5 as your maximum
+ there will be 25 function calls.  If you pick 10 you'll have a hundred function calls.
+<li><b>Don't bite off more than you can chew.</b> In other words, start with the simplest possible
+ model and work your way up.  I recommend the following sets:<br>
+ <ol>
+ <li>two parallel polygons, each in front of the other.
+ <li>two parallel polygons, each behind the other.
+ <li>two polygons that are coplanar
+ <li>two square polygons that intersect each other
+ <li>two polygons that share one edge but are NOT coplanar.
+ </ol>
+If all those cases work, every case should work.
+<li><b>If many polygons reference a single plane class</b> be sure when splitting to use the polygon
+ normal or everything will be <i>backwards</i> and (especially in the case of leaf-based trees) all
+ hell will break loose.
+</ul>
+<br>
+<hr>
+<br>
+So we've managed to cover how BSPs are built, how BSPs are rendered and a very quick way of clipping at
+ least some of the tree to save us CPU time.  But there's more still to come!  We're going to take a
+ look at Constructive Solid Geometry, Possible Visible Set and then get into some even cooler stuff like
+ mirrors and radiosity lighting.  BSPs - the tree with a million uses.<br>
+<br>
+<a href="#top">Back to the top</a>
+<hr>
+<b>PREV: <a href="Engine02.shtml">Overall structure</a></b><br>
+<b>NEXT: <a href="Engine04.shtml">Constructive Solid Geometry</a></b><br>
+<BR><BR></FONT>
+</TD></TR></TABLE>
+</TD>
+</TR>
+
+</TABLE>
+
+<HR ALIGN="CENTER" SIZE="1" WIDTH="700" NOSHADE>
+<FONT FACE="arial" SIZE="-2">All photos copyright of their respective owners.  All other content of this website is &copy; 1997-1999 Dan Royer.<BR>
+Designed for IE 5.0+, 800x600x16 or greater.  Some pages use style sheets.<br>
+<A HREF="http://members.home.com/droyer/index.html"
+   TITLE="Dan's Homepage">http://members.home.com/droyer/index.html</A><br>
+</FONT>
+
+</CENTER>
+<BR>
+<BR>
+
+</BODY>
+</HTML>
+</HTML>

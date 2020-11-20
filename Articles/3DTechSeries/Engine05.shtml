@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Dan's Tutorials: 05 - Portals</title>
+	<LINK REL="stylesheet" HREF="tutorial_styles.css">
+</head>
+
+<BODY BGCOLOR="white">
+<a name="top"></a>
+<BR>
+<CENTER>
+<!--
+<br>
+<DIV CLASS="main1">DAN'S</div><div class="main2">Programming Tutorials</DIV>
+<br>
+<TABLE WIDTH="700" BORDER="0" CELLPADDING="5" CELLSPACING="0">
+<TR><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+[</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="index.shtml">news</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+tutorials</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<!--A HREF="Files.shtml"--><!--files</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<a href="ResourcesWeb.shtml">links</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="Contact.shtml">contact</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+]</B></FONT>
+</TD></TR>
+</TABLE>
+-->
+<BR>
+
+<TABLE WIDTH="700" BORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="CENTER" VALIGN="TOP">
+
+<tr>
+<td valign="top" align="left" width="200">
+
+<TABLE WIDTH="200" BORDER="1" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver" ALIGN="center">
+<FONT FACE="arial" COLOR="black"><B>Table of Contents</B></FONT>
+</TD></TR>
+</TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="3" CELLSPACING="0"><TR><TD>
+<FONT FACE="arial" SIZE="-1">
+<BR>
+<CENTER><B>3D</B></CENTER>
+Creating a cutting-edge engine<BR>
+ &nbsp; <A HREF="Engine01.shtml">01 - Design document</A><BR>
+ &nbsp; <A HREF="Engine02.shtml">02 - Overall structure</A><BR>
+<BR>
+ &nbsp; <A HREF="Engine03.shtml">03 - Binary Space Partitioning</A><BR>
+ &nbsp; <A HREF="Engine04.shtml">04 - Constrctive Solid Geometry</A><BR>
+ &nbsp; <A HREF="Engine05.shtml">05 - Portals</A><BR>
+ &nbsp; <A HREF="Engine06.shtml">06 - Possible Visible Set</A><BR>
+ &nbsp; <A HREF="Engine07.shtml">07 - Radiosity lighting</A><BR>
+ &nbsp; <!--A HREF="Engine08.shtml"-->08 - Mirrors</A><BR>
+<BR>
+<!--A HREF="Dictionary.shtml"-->Dictionary of 3D terms</A><BR>
+<BR>
+<CENTER><B>OTHER</B></CENTER>
+<!--A HREF="GeneticAlgorithm.shtml"-->A Genetic Algorithm</A><BR>
+<A HREF="Line01.shtml">Line drawing</a><BR>
+<!--A HREF="Line02.shtml"-->Line clipping</a><BR>
+<!--A HREF="Line03.shtml"-->Line antialiasing</a><BR>
+<!--A HREF="Line04.shtml"-->Line thickening</a><BR>
+<!--A HREF="Line05.shtml"-->Line curving</a><BR>
+<br>
+<A HREF="ResourcesPrint.shtml">Resources in print</A><BR>
+<A HREF="ResourcesWeb.shtml">Resources on the web</A><BR>
+<!--A HREF="ResourcesFiles.shtml"-->Resources to download</A><BR>
+<BR>
+</FONT>
+</TD></TR></TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR><TD><FONT FACE="arial" SIZE="-2">
+Excellent, dude.<br>
+<img src="billted.jpg" width="200" height="120" alt="Keanu Reves at his finest." border="0">
+</FONT></TD></TR>
+<TR><TD HEIGHT="780"></TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-2">
+We need to go back - to the future!<br>
+<img src="backtothefuture.jpg" width="200" height="112" alt="Time travel 101: Be born in an 80's scifi movie." border="0">
+</FONT></TD></TR>
+</TABLE>
+</td>
+<td valign="top" align="right" width="500">
+
+<table width="475" border="0" cellpadding="3" cellspacing="0">
+<tr><td bgcolor="silver">
+<font face="arial"><b>05 - Portals</b></font>
+</td></tr>
+<tr><td><font face="arial" size="-1">
+A lot of people like writing 3D engines in C and they're really proud of the fact.  I think the reasons
+ are two fold:<br>
+<ol>
+<li>They're stubborn conservatives who like "the old way" of doing things.
+<li>They've never worked with portals.
+</ol>
+For OOP programers, portals can be coded in a remarkably small ammount of time.  For the rest of you,
+ Ha ha!  Why does OOP give such an advantage?  <i>Portals reuse all the basic polygon code</i>.  Can you
+ say "derived class?"  When I realized that fact I went one step further and made a class for polygons
+ and two derived classes, one for texture mapped polygons and one for portals.<br>
+<br>
+<hr>
+As I mentioned at the end of <a href="Engine04.shtml">Constructive Solid Geometry</a> it is possible to
+ write an entire engine using nothing more than portals, but that's an excercise for another day.  We're
+ going to use portals to reduce rasterizer overdraw to zero and in the following sections we'll
+ recycle them to do a whole bunch of other EXCELLENT things.<br>
+<hr>
+<br>
+But what exactly <i>are</i> portals?  Consider this simple BSP model:<br>
+<br>
+<p align="center"><img src="0501.jpg" width="300" height="200" alt="a simple BSP" border="0"></p>
+<br>
+Each red line is on a BSP node plane.  However, each red line is also the location of a portal.  The
+ portals are transparent polygons that describe the area in a model where each node touches another.
+ Every portal contains information on the leaf nodes it is sandwiched between and so for the remainder
+ of these pages I will reffer to portals by the nodes they touch.  So portal (1,2) touches both node 1
+ and node 2 <b>however</b> there is no guarantee that node 1 is in front of the portal.<br>
+<br>
+Using portals is really easy, it's the building of portals that can stump a lot of people.  The most
+ important thing to note is that every portal in on a node plane.  This suggests that we'd want a
+ recursive function.  The second thing to note is that the shape of the portals can be described by
+ the polygons in the model, which means it can be described by the nodes in the model.  Since every
+ node that has a portal must have both a front and a back it can be shown that the nodes required to
+ clip a portal are the front and back child nodes of the node that shares the plane of the portal.  In
+ english that means we're looking at a recursive function <i>inside a recursive function</i>.<br>
+<br>
+</font><pre>
+node::BuildPortal() {
+  <font color="green">// leaf nodes can't have polygons</font>
+  if( this node is missing front and back children )
+    return;
+  <font color="green">// Nodes with no back child can't pass between
+  // two interior convex sections.  Since all
+  // node planes come from a polygon, the case of
+  // a node with no front child will never happen.</font>
+  if( this node has a back child ) {
+    Build an initial portal on the plane of this polygon
+    Recursively clip the portal against the front tree
+      (CSG-style).  When a portal fragment gets to a
+      leaf store a refrence to that leaf in the fragment.
+    Recursively clip the portal against the back tree
+      (CSG-style).  When a portal fragment gets to a
+      leaf store a refrence that leaf in the fragment.
+    Delete all fragments that end on the back side of
+      a node.
+    Add the remaining fragments to the master portal list.
+  }
+  if( inside ) inside->BuildPortal();
+  if( outside ) outside->BuildPortal();
+}
+</pre><font face="arial" size="-1">
+<hr>
+Note: I find it also helps (for speed reasons) to store in each node a list of all the portals touching
+ that node.
+<hr>
+<br>
+This leaves us with one really important part, building the initial portal.  We'll NEED an initial
+ portal that is big enough to encompass all the areas where interior nodes touch.  Fortunately we've
+ got the node plane and the node boundings.<br>
+<Br>
+<p align="center"><img src="0502.jpg", width="240" height="165" alt="The plane in the bounding box." border="0">
+</p><br>
+<br>
+We have a plane <font color="red"><b>P</b></font> and a box of dimensions <b>maxP</b> and <b>minP</b>.  What we want to find
+ are the four points where the plane meets the corners of the box
+ (<font color="green"><b>P<sub>0</sub></b></font>, <font color="green"><b>P<sub>1</sub></b></font>,
+ <font color="green"><b>P<sub>2</sub></b></font> and <font color="green"><b>P<sub>3</sub></b></font>).
+ Really the next steps are very easy.<br>
+</font><pre>
+<font color="green">
+// We're assuming Pn is the plane normal.
+// Find point Cp in the portal boundaries on the plane.</font>
+<font color="blue"><b>Cb</b></font> = ( <b>maxP</b> + <b>minP</b> ) / 2.
+dist = <font color="blue"><b>Cb</b></font> dot product with <font color="red"><b>Pn</b></font>
+<font color="blue"><b>Cp</b></font> = <font color="red"><b>Pn</b></font> * -dist;
+
+<font color="green">// Find vectors U and V orthogonal to Pn.</font>
+A.x = A.y = A.z = 0;
+if( <font color="red"><b>Pn</b></font>.y > <font color="red"><b>Pn</b></font>.z ) {
+  if( <font color="red"><b>Pn</b></font>.z > <font color="red"><b>Pn</b></font>.x ) A.x = 1;
+  else A.z = 1;
+} else if( <font color="red"><b>Pn</b></font>.y > <font color="red"><b>Pn</b></font>.x ) A.x = 1;
+else A.y = 1;
+
+U = A cross product with <font color="red"><b>Pn</b></font>.
+normalize U.
+V = U cross product with <font color="red"><b>Pn</b></font>.
+<font color="green">
+// scale the U and V.  This is the cheap 'n' easy way.</font>
+U *= boundingSphere.radius;
+V *= boundingSphere.radius;
+
+<font color="green">// now calculate the corners.</font>
+<font color="green"><b>P<sub>0</sub></b></font> = <font color="blue"><b>Cp</b></font> + U + V;
+<font color="green"><b>P<sub>1</sub></b></font> = <font color="blue"><b>Cp</b></font> + U + V;
+<font color="green"><b>P<sub>2</sub></b></font> = <font color="blue"><b>Cp</b></font> - U - V;
+<font color="green"><b>P<sub>3</sub></b></font> = <font color="blue"><b>Cp</b></font> - U + V;
+</pre><font face="arial" size="-1">
+Ta da!  All done.<br>
+<br>
+I promised I'd show you how to reduce overdraw to zero.  Geeze, I bring it on myself.  I should say near
+ zero because even with this system there are still a few tiny slivers.  It's the old addage "build an
+ idiot proof machine and someone will notice the polygons overlap", you know what I mean?  Since it's
+ 0330 where I live, I'll be brief:  Start each frame with a 2D portal the size of the renering area and
+ store it in, say, <b>pClipPortals</b>.  At each step in the BSP tree walk-to-render, transform the
+ polygons to screen coordinates and clip them to the portals in <b>pClipPortals</b>.  Then transform any
+ portals touching the current node and clip <b>pClipPortals</b> to the new portals if and <i>only</i>
+ if they overlap.<br>
+<br>
+<p align="center"><img src="0503.jpg" width="200" height="100" alt="Valid 2D Portal/Portal clipping" border="0"><br>
+<font size="-2">A remains untouched, B is clipped by the new portal C to produce D.</font></p>
+<br>
+<hr>
+<br>
+Unfortunately, Portal generation is one of those things that are annoyingly hard to debug.  If you've
+ written CSG operations you might have a bit of a better feel for what kinds of problems you'll
+ encounter.  Me myself personally, I wrote my CSG code to use node-based trees and my Portal generation
+ used leaf-based trees.  So there wasn't much crossover.  As long as you have a good poly/poly clipping
+ system set up, you can reuse that to save yourself a ton of work and potential debugging.  Remember:
+ the error cannot be in the code you've proven works, so recycled code is your friend for more reasons
+ that just saving you time.
+<br>
+<hr>
+<br>
+The difference between this system and a portal engine is that a portal engine dosen't have a BSP tree.
+ Yes, it has more flexible levels that you can modify on-the-fly.  No, it probably won't run as fast
+ and it will be a <i>very</i> different story when it comes to portal generation.<br>
+<br>
+Yaay, that's all done and over with.  *phew*.  We've seen how to generate the initial portal on each
+ plane and how to reduce those initial portals to the absolutely smallest size possible.  Next we're
+ going to take those portals and do a really great speed enhancement that'll impress all your friends.
+<br>
+<br>
+<a href="#top">Back to the top</a>
+<hr>
+<b>PREV: <a href="Engine04.shtml">Constructive Solid Geometry</a></b><br>
+<b>NEXT: <a href="Engine06.shtml">Possible Visible Set</a></b><br>
+<br><br></font>
+</td></tr></table>
+</td>
+</tr>
+
+</TABLE>
+
+<HR ALIGN="CENTER" SIZE="1" WIDTH="700" NOSHADE>
+<FONT FACE="arial" SIZE="-2">All photos copyright of their respective owners.  All other content of this website is &copy; 1997-1999 Dan Royer.<BR>
+Designed for IE 5.0+, 800x600x16 or greater.  Some pages use style sheets.<br>
+<A HREF="http://members.home.com/droyer/index.html"
+   TITLE="Dan's Homepage">http://members.home.com/droyer/index.html</A><br>
+</FONT>
+
+</CENTER>
+<BR>
+<BR>
+
+</BODY>
+</HTML>
+</html>

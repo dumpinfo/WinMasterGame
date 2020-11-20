@@ -1,0 +1,405 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Dan's Tutorials: 07 - Radiosity lighting</title>
+	<LINK REL="stylesheet" HREF="tutorial_styles.css">
+</head>
+
+<BODY BGCOLOR="white">
+<a name="top"></a>
+<BR>
+<CENTER>
+<!--
+<br>
+<DIV CLASS="main1">DAN'S</div><div class="main2">Programming Tutorials</DIV>
+<br>
+<TABLE WIDTH="700" BORDER="0" CELLPADDING="5" CELLSPACING="0">
+<TR><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+[</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="index.shtml">news</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+tutorials</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<!--A HREF="Files.shtml"--><!--files</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<a href="ResourcesWeb.shtml">links</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="Contact.shtml">contact</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+]</B></FONT>
+</TD></TR>
+</TABLE>
+-->
+<BR>
+
+<TABLE WIDTH="700" BORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="CENTER" VALIGN="TOP">
+
+<tr>
+<td valign="top" align="left" width="200">
+
+<TABLE WIDTH="200" BORDER="1" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver" ALIGN="center">
+<FONT FACE="arial" COLOR="black"><B>Table of Contents</B></FONT>
+</TD></TR>
+</TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="3" CELLSPACING="0"><TR><TD>
+<FONT FACE="arial" SIZE="-1">
+<BR>
+<CENTER><B>3D</B></CENTER>
+Creating a cutting-edge engine<BR>
+ &nbsp; <A HREF="Engine01.shtml">01 - Design document</A><BR>
+ &nbsp; <A HREF="Engine02.shtml">02 - Overall structure</A><BR>
+<BR>
+ &nbsp; <A HREF="Engine03.shtml">03 - Binary Space Partitioning</A><BR>
+ &nbsp; <A HREF="Engine04.shtml">04 - Constrctive Solid Geometry</A><BR>
+ &nbsp; <A HREF="Engine05.shtml">05 - Portals</A><BR>
+ &nbsp; <A HREF="Engine06.shtml">06 - Possible Visible Set</A><BR>
+ &nbsp; <A HREF="Engine07.shtml">07 - Radiosity lighting</A><BR>
+ &nbsp; <!--A HREF="Engine08.shtml"-->08 - Mirrors</A><BR>
+<BR>
+<!--A HREF="Dictionary.shtml"-->Dictionary of 3D terms</A><BR>
+<BR>
+<CENTER><B>OTHER</B></CENTER>
+<!--A HREF="GeneticAlgorithm.shtml"-->A Genetic Algorithm</A><BR>
+<A HREF="Line01.shtml">Line drawing</a><BR>
+<!--A HREF="Line02.shtml"-->Line clipping</a><BR>
+<!--A HREF="Line03.shtml"-->Line antialiasing</a><BR>
+<!--A HREF="Line04.shtml"-->Line thickening</a><BR>
+<!--A HREF="Line05.shtml"-->Line curving</a><BR>
+<br>
+<A HREF="ResourcesPrint.shtml">Resources in print</A><BR>
+<A HREF="ResourcesWeb.shtml">Resources on the web</A><BR>
+<!--A HREF="ResourcesFiles.shtml"-->Resources to download</A><BR>
+<BR>
+</FONT>
+</TD></TR></TABLE>
+
+</td>
+<td valign="top" align="right" width="500">
+
+<table width="475" border="0" cellpadding="3" cellspacing="0">
+<tr><td bgcolor="silver">
+<font face="arial"><b>07 - Radiosity lighting</b></font>
+</td></tr>
+<tr><td><font face="arial" size="-1">
+Radiosity lighting is one of those things that makes everybody sit up and say "oh, my."  With a good
+ level designer and a good texture artist radiosity can really look cool.  Even if you're doing it all
+ by yourself and you have no artistic talent at all, radiosity can still make any level look better.
+ Radiosity is to 3D what mayonnaise is to a smoked turkey and roast beef sandwich with lettuce...and
+ tomato...excuse me, I'll be right back.<br>
+<br>
+Moo can cobe a fimple *gulp* You can code a simple radiosity calculator in a very short period of time.
+ The only drawback is that the complexity of your calculator is inversely proportional to the speed at
+ which it runs.  I think that's one of Murphy's laws.  The first step to setting up a radiosity
+ calculator is to have an engine that can render light maps.  "Ah, but if you don't have light maps, how
+ can you tell if it's rendering them?"  Use a hex editor and make some really simple grey scale light maps
+ by hand to test.  There is one major decision to make at this point and it is: how detailed will your
+ light maps be?  Quake had a maximum resolution of (I think) 32x32 which worked great until you had sharp
+ contrasts on a big wall, it looked like a set of 'z's running down the wall.  You can opt for larger
+ light maps or (if you're feeling up to it) you can make different sized light maps for different polygons.
+ Who knows, two or three different sizes might actually save you some memory.<br>
+<br>
+<center><img src="0706.jpg" width="428" height="128" border="0" alt="texturemaps and lightmaps"></center>
+<br>
+Once you've got light maps working you've got a foundation to test on, so you can start writing the
+ calculator.  I'm going to break each of the major concepts into separate groups, take your time to eat
+ a sandwich or something between them 'cause it's heavy stuff.<br>
+<br>
+<hr>
+ &nbsp; <b>The Radiosity Equation</b><br>
+<br>
+The concept of radiosity is pretty easy.  The reason more people haven't implemented it is because almost
+ know one who understands it wants to talk about it, probably because they've all got high pay, high stress
+ jobs that keep them far too busy.  Sounds to me like someone's bought their silence, probably some of
+ those same guys who claim the whole Roswell thing was to keep Stalin scared the US had UFOs technology.
+ Oh yeah, it's all so clear to me now...<br>
+<br>
+...My point being that once you get past all the integrals and the differential areas and a whole bunch of
+ other fancy lingo it breaks down to this:  For every point on every surface everywhere in the world find
+ the total amount of light incident at that point.  By incident I mean find all the light that is
+ <i>absorbed</i>, <i>reflected</i> or <i>emitted</i> at that point.<br>
+<br>
+Think about that for a minute: if you're going to find every point on every surface blah blah blah, how
+ big are your points?  I mean if they're infinitely small points then it would take forever to solve the
+ equation.  Uh oh.  The solution is to break each surface into finite, bite size pieces called
+ <i>patches</i> and average the light incident in each patch.  Once all the calculations are done the the
+ patches can be converted back to light maps and voila!<br>
+<br>
+Before I show you how to figure out how much light travels from patch i to patch j there's one more very
+ important point to touch on.  As I said, radiosity works by finding the amount of light incident at
+ every point everywhere in the world <b>BUT</b> it is supposed to find these values <i>simultaneously</i>.
+ Stay calm, it's not as bad as you might think.  When radiosity calculations were first invented there was
+ a brute force solution - given that you had n patches you could build an n<sup>2</sup> matrix and (slowly)
+ solve it until your first row or column had the light values at every point.  In today's world of highly
+ complex geometries and the ever greater push to wow people with high polygon counts, a matrix just isn't a
+ practical solution.<br>
+<br>
+Thus <i>Progressive Refinement</i> came to be.  The idea works like this:  Find the patch giving off the
+ most light and send it's light to all the other patches.  Repeat until the brightest patch is giving off
+ less than some really small value.  This means we have to keep track of both the radiosity (light incident)
+ and the delta radiosity (amount of light being reflected) of each patch.<br>
+<br>
+ But is there anything else we need to keep track of?  Take a look at the wall for a second.  What is it
+ you're seeing?  The light hitting the wall or the light being reflected?  If you said reflected, give
+ yourself a back on the back.  Careful, you don't break the arm!  If we denote a patch n's radiosity as
+ <b>B<sub>n</sub></b> then our equation so far is<br>
+<br>
+<center><img src="0701.jpg" width="125" height="100" border="0" alt="Beginnings of the radiosity eqn'"></center>
+<br>
+Where Pj is the amount of reflected light, some value in the range (0...1).  No sweat, right?  Well, this
+ equation would only work if every patch was exactly the same size, shape and distance apart.  First of all,
+ we can (for the most part) ignore a difference in shape but size is crucial. If you shine a light the size
+ of a pin near a wall you'd see almost no change on the wall.  However the opposite is also true, if you held
+ a pin sized dot near a well lit wall, you'd see the dot very clearly.  If we denote the area of a patch n as
+ <b>A<sub>n</sub></b> then we've now got<br>
+<br>
+<center><img src="0702.jpg" width="225" height="100" border="0" alt="Radiosity eqn' continued..."></center>
+<br>
+Much better, but it still needs work.  What we're missing is the <i>Form Factor</i>, the most powerful part of
+ the process.  If we weren't using patches, the form factor equation would look like this:<br>
+<br>
+<center><img src="0703.jpg" width="375" height="110" border="0" alt="Form factor eqn'"></center>
+<br>
+Yikes!  Thankfully we're using patches so we can take out all the integrals and simplify to<br>
+<br>
+<center><img src="0704.jpg" width="275" height="75" border="0" alt="Simpler form factor eqn'"></center>
+<br>
+Where
+<ul>
+<li><b>cos( theta i ) * cos( theta j )</b> is the angle between the normals of the planes of each patch.  This
+ will make sure that a patch in front of a light source gets more light than one that's way off to a side.  It
+ will also make sure that a patch that faces directly into the light will get more light than a patch that's
+ turned away.
+<li><b>pi * r<sup>2</sup></b> accounts for the distance between the two patches.  The further away, the dimmer
+ the light.
+<li><b>H( i, j )</b> is the visibility between patches i and j.  If there is no line of sight between i and j then
+ H( i, j ) would be 0.  If there was full visibility between the two then H( i, j ) would be 1.  Naturally, H( i, j )
+ can be some fraction in the range [0...1] if the line of sight is partially occluded (blocked)
+<li><b>dAj</b> is the area of patch j.
+</ul>
+So our final patch to patch radiosity equation is<br>
+<br>
+<center><img src="0705.jpg" width="260" height="100" border="0" alt="Radiosity eqn' continued..."></center>
+<br>
+I know that seems weird multiply by dAj in the form factor and then dividing by dAj back in the main part of the
+ radiosity equation but that's the way it goes.  Personally, I'd just simplify and remove both references.  Note that
+ no one I spoke to would give me a straight, concise answer on what dAj was supposed to be in the form factor so it
+ could be that I've totally screwed this up but if that were true my code wouldn't be working, would it? (:<br>
+</font>
+<pre>
+<font color="green">/* Pseudocode for a simple radiosity calculator loop.
+ * I highly reccomend using doubles everywhere, you
+ * will need the extra precision.
+ */</font>
+.
+.
+.
+cPatch <font color="navy">*</font>pSrc<font color="navy">, *</font>pDest<font color="navy">, *</font>pNext<font color="navy">;</font>
+<font color="blue">double</font> FF<font color="navy">,</font> deltaRad<font color="navy">;</font>
+
+<font color="blue">while</font><font color="navy">( (</font> pSrc <font color="navy">=</font> FindBrightestPatch<font color="navy">() ) !=</font> NULL <font color="navy">) {</font>
+  <font color="blue">for</font><font color="navy">(</font> pDest <font color="navy">=</font> pPatchList<font color="navy">;</font> pDest<font color="navy">;</font> pDest <font color="navy">=</font> pNext <font color="navy">) {</font>
+    pNext <font color="navy">=</font> pDest<font color="navy">-&gt;</font>d_pNext<font color="navy">;</font>
+
+    FF <font color="navy">=</font> FormFactor<font color="navy">(</font> pSrc<font color="navy">,</font> pDest <font color="navy">);</font>
+    <font color="blue">if</font><font color="navy">( !</font>FF <font color="navy">)</font> <font color="blue">continue</font><font color="navy">;</font>
+
+    deltaRad <font color="navy">=</font> pSrc<font color="navy">-&gt;</font>d_deltaRad <font color="navy">*</font> pDest<font color="navy">-&gt;</font>d_reflect
+             <font color="navy">*</font> FF <font color="navy">*</font> H <font color="navy">*</font> pSrc<font color="navy">-&gt;</font>d_area <font color="navy">/</font> pDest<font color="navy">-></font>d_area<font color="navy">;</font>
+    pDest<font color="navy">-&gt;</font>d_deltaRad <font color="navy">+=</font> deltaRad<font color="navy">;</font>
+    pDest<font color="navy">-&gt;</font>d_rad <font color="navy">+=</font> deltaRad<font color="navy">;</font>
+  <font color="navy">}</font>
+<font color="navy">}</font>
+.
+.
+.
+<font color="green">
+/* There's an extra multiply and divide that could
+ * also be removed but I left it in because
+ * src.area/dest.area is a ratio, it's easier to
+ * understand what's going on.
+ */</font>
+<font color="blue">double</font> FormFactor<font color="navy">(</font> cPatch <font color="navy">*</font>pSrc<font color="navy">,</font> cPatch <font color="navy">*</font>pDest <font color="navy">) {</font>
+  <font color="blue">double</font>   H<font color="navy">,</font> angle1<font color="navy">,</font> angle2<font color="navy">,</font> dist<font color="navy">,</font> factor<font color="navy">;</font>
+  cVector3 vec<font color="navy">;</font>
+
+  H <font color="navy">=</font> LineOfSight<font color="navy">(</font> pSrc<font color="navy">,</font> pDest <font color="navy">);</font>
+  <font color="blue">if</font><font color="navy">( !</font>H <font color="navy">)</font> <font color="blue">return</font> <font color="red">0.0</font><font color="navy">;</font>
+
+  vec <font color="navy">=</font> pDest<font color="navy">-&gt;</font>d_center <font color="navy">-</font> pSrc<font color="navy">-&gt;</font>d_center<font color="navy">;</font>
+  dist <font color="navy">=</font> vec<font color="navy">.</font>Length<font color="navy">()</font><font color="navy">;</font>
+  vec <font color="navy">/=</font> dist<font color="navy">;</font>
+
+  angle1 <font color="navy">=</font> vec <font color="navy">|</font> pSrc<font color="navy">-&gt;</font>d_pPoly<font color="navy">-&gt;</font>GetNormal<font color="navy">()</font><font color="navy">;</font>
+  angle2 <font color="navy">=</font> <font color="navy">-(</font> vec <font color="navy">|</font> pDest<font color="navy">-&gt;</font>d_pPoly<font color="navy">-&gt;</font>GetNormal<font color="navy">() )</font><font color="navy">;</font>
+
+  factor <font color="navy">=</font> angle1 <font color="navy">*</font> angle2 <font color="navy">*</font> pDest<font color="navy">-&gt;</font>d_area <font color="navy">*</font> H<font color="navy">;</font>
+  factor <font color="navy">/=</font> PI <font color="navy">*</font> dist <font color="navy">*</font> dist<font color="navy">;</font>
+
+  <font color="blue">return</font> factor<font color="navy">;</font>
+<font color="navy">}</font>
+</pre>
+<font face="arial" size="-1">
+Often when rendering large models it's a good idea to see the work in progress so that you can stop if it
+ isn't going quite as planned.  Rendering patches to the screen shouldn't prove to be a big challenge for
+ you battle hardened 3D veterans but there will be little problem: at the start of the program the light
+ level for most polygons will be zero!  The solution is to compensate by adding the <i>global ambient</i>
+ term to each patch as it is being rendered.  Note that the global ambient term is <b>ONLY</b> for rendering
+ while calculating because it will approach zero as the calculation nears completion.  The global ambient
+ term is calculated thusly:<br>
+</font>
+<pre>
+<font color="green">/* Ambient term calculation.  Reflective term can be
+ * used later to speed up ambient term updates
+ * and prevent infinite looping.
+ */</font>
+cPatch *</font>pPatch<font color="navy">, *</font>pNext<font color="navy">;</font>
+<font color="blue">double</font> ambient<font color="navy">,</font> reflect<font color="navy">,</font> area<font color="navy">;</font>
+
+ambient <font color="navy">=</font> <font color="red">0.0</font><font color="navy">;</font>
+reflect <font color="navy">=</font> <font color="red">0.0</font><font color="navy">;</font>
+area <font color="navy">=</font> <font color="red">0.0</font><font color="navy">;</font>
+<font color="blue">for</font><font color="navy">(</font> pPatch <font color="navy">=</font> pPatchList<font color="navy">;</font> pPatch<font color="navy">;</font> pPatch <font color="navy">=</font> pPatch <font color="navy">) {</font>
+  pNext <font color="navy">=</font> pPatch<font color="navy">-&gt;</font>d_pNext<font color="navy">;</font>
+  ambient <font color="navy">+=</font> pPatch<font color="navy">-&gt;</font>d_deltaRad <font color="navy">*</font> pPatch<font color="navy">-&gt;</font>d_area<font color="navy">;</font>
+  reflect <font color="navy">+=</font> pPatch<font color="navy">-&gt;</font>d_reflect <font color="navy">*</font> pPatch<font color="navy">-&gt;</font>d_area<font color="navy">;</font>
+  area <font color="navy">+=</font> pPatch<font color="navy">-&gt;</font>d_area<font color="navy">;</font>
+<font color="navy">}</font>
+
+reflect <font color="navy">/=</font> area<font color="navy">;</font>
+<font color="green">// &lt;= 0 - almost all walls black
+// &gt;= 1 - all walls white, infinite loop.</font>
+<font color="blue">if</font><font color="navy">(</font> reflect <font color="navy">&lt;=</font> <font color="red">0.0</font> <font color="navy">||</font> reflect <font color="navy">&gt;=</font> <font color="red">1.0</font> <font color="navy">)</font> return<font color="navy">;</font>
+
+reflect <font color="navy">=</font> <font color="red">1.0</font> <font color="navy">/ (</font> <font color="red">1.0</font> <font color="navy">-</font> reflect <font color="navy">);</font>
+
+ambient <font color="navy">*=</font> reflect <font color="navy">/</font> area<font color="navy">;</font>
+</pre>
+<font face="arial" size="-1">
+Now that you know everything you need for your first radiosity processor, let's take a look at some ways to speed
+ things up and avoid pitfalls.<br>
+<br>
+<hr>
+ &nbsp; <b>Patches: Triangles or Rectangles?</b><br>
+<br>
+ There are two basic options for splitting polygons into patches: triangles and rectangles.  I tried
+ triangles first because<br>
+<ul>
+<li>Their area is easy to calculate.
+<li>Their corners are (relatively) easy to calculate.
+<li>The triangle patches stay exactly within the boundaries of the region of the light map of the polygon
+ they're associated to.  Go ahead, say it six times fast, I dare you. P:
+<li>When <i>subdividing</i> a patch into smaller pieces I could use the middle of each edge as the points
+ for the new vertexes, giving me four new patches exactly 1/4 the size.  The added advantage here was that
+ if the original patch was very tall and very narrow (not good) then each of the sub patches would be 1/2
+ the size and 1/2 the width, bringing them gradually closer to right angled (better).
+</ul>
+They were great for a brief time but I quickly realized why they weren't used in games like quake and
+ half-life:  <i>They look like crap</i>.  So I switched to square patches and discovered many advantages.
+<ul>
+<li>Square patches are even easier to subdivide.
+<li>They don't require information on where the corners are, just the width and height so they save time
+ and ram.  Schwinnng!  <i>Party on Wayne.  Party on Garth.</i>
+<li>Converting square patches back into light maps is a lot simpler - you don't have to rasterize triangles
+ or worry about floating point imprecision.
+<li>Squares are much better area to approximate over than irregular triangles, so results would be more
+ accurate.
+<li>They don't look like crap.
+</ul>
+<hr>
+ &nbsp; <b>Pitfalls</b><br>
+<br>
+Radiosity really had me stumped at first and I kept screwing with just about every piece of code I could
+ until I stumbled upon the solution and, of course, it wasn't where I expected at all.  So here are a few
+ of the setbacks I encountered and what to do about them:<br>
+<br>
+<ul>
+<li><b>I have no idea what the hell is going on...</b>  Try starting with a simpler model.  The first
+ radiosity images were of a cube with a lit ceiling (think of the cheap halogen light panels at school).
+ Always remember to start simple.  After all, you did and look!  You're almost nearly perfect! (:
+<li><b>Everything is way too dark, except the light source!</b> This could be one of two problems:
+<ol>
+<li>Your patch reflect value is way too low.  I find a value of around 0.55 to 0.75 in the models I've
+ tested so far.
+<li>Your patches are too big.  The smaller the patches, the more accurate the image.  A good way to gauge
+ the amount of inaccuracy is to sum the total light that actually reaches the destination patches and
+ compare that to the amount of light that left the source patch.  You'll see that the number starts
+ frighteningly large and drops in a k/n<sup>2</sup> fashion if your patches are too big.
+</ol>
+<li><b>Things are so SLOOOW!</b>  The greater the detail, the slower the calculation.  Et la vie, elle pu
+ de temps en temps.  Squeeze every possible ounce out of your optimizations as you possibly can.
+<li><b>There's a tiny patch in front of a big patch and the big patch is completely black!</b> (or)
+<li><b>There's a tiny patch in front of a big patch, why doesn't the tiny patch cast a shadow?</b>  Your
+ line of sight test isn't catching this situation correctly.  Or perhaps it is, but not returning the
+ correct fraction.  It's this visibility problem that keeps scientists employed.
+</ul>
+<hr>
+ &nbsp; <b>Faster, faster!  OH, YES!  YES!</b> *ahem*<br>
+<br>
+How to go faster can be summed into three categories.<br>
+<br>
+<b>Adaptive Subdivision</b> is a really neat trick.  Instead of cutting your initial polygons into teeny
+ tiny itsy bitsy eeny weeny (yellow polka dot bikini...) patches try starting with somewhat larger patches.
+ When you're sending light to the patch, check to see if the radiosity gradient is too high across the
+ surface (if the change in light is too high).  If it is, split
+ the patch into smaller pieces.<br>
+<br>
+<center><img src="0708.jpg" width="428" height="128" border="0" alt="Adaptive subdivision"></center>
+<br>
+<b>Elements</b> are another good idea for your calculator.  Each element contains a certain number of adjacent
+ patches.  Only <b>send</b> from the elements but <b>catch</b> the light with the patches, which then report
+ the change in delta radiosity to their element.  I made one element for every four patches, thus saving myself
+ 1/4 the work.  Granted, it will widen the margin of error but by so little that it shouldn't matter.  Also be
+ careful that when you design your elements that they won't cause problems with adaptive subdivision, I had
+ trouble getting them to play nice together.<br>
+<br>
+<b>Hemicubes</b> offer a distinct speed improvement and are by far the most touted, though why this is I don't
+ really know, they seem way too prone to error for my taste.  I'll write more about them after I get a chance
+ to try them.<br>
+<br>
+<hr>
+<br>
+Wasn't that fun?  I didn't think so either.  I finished my first radiosity calculator in nine days
+ without eating, sleeping or taking care of personal hygiene 'cause I had a deadline to meet.  Can you tell
+ it's 0400 where I live?<br>
+<br>
+...Since we've been talking about reflective surfaces, it seems only appropriate that we delve into mirrors
+ next!
+<br>
+<br>
+<a href="#top">Back to the top</a>
+<hr>
+<b>PREV: <a href="Engine06.shtml">Possible Visible Set</a></b><br>
+<b>NEXT: <!--a href="Engine08.shtml"-->Mirrors</a></b><br>
+<br></font>
+</td></tr></table>
+</td>
+</tr>
+
+</TABLE>
+
+<HR ALIGN="CENTER" SIZE="1" WIDTH="700" NOSHADE>
+<FONT FACE="arial" SIZE="-2">All photos copyright of their respective owners.  All other content of this website is &copy; 1997-1999 Dan Royer.<BR>
+Designed for IE 5.0+, 800x600x16 or greater.  Some pages use style sheets.<br>
+<A HREF="http://members.home.com/droyer/index.html"
+   TITLE="Dan's Homepage">http://members.home.com/droyer/index.html</A><br>
+</FONT>
+
+</CENTER>
+<BR>
+<BR>
+
+</BODY>
+</HTML>
+</html>

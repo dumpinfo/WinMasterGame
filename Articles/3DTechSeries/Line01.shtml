@@ -1,0 +1,348 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Dan's Tutorials: Line Drawing</title>
+	<LINK REL="stylesheet" HREF="tutorial_styles.css">
+</head>
+
+<BODY BGCOLOR="white">
+<a name="top"></a>
+<BR>
+<CENTER>
+<!--
+<br>
+<DIV CLASS="main1">DAN'S</div><div class="main2">Programming Tutorials</DIV>
+<br>
+<TABLE WIDTH="700" BORDER="0" CELLPADDING="5" CELLSPACING="0">
+<TR><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+[</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="index.shtml">news</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+tutorials</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<!--A HREF="Files.shtml"--><!--files</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<a href="ResourcesWeb.shtml">links</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="Contact.shtml">contact</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+]</B></FONT>
+</TD></TR>
+</TABLE>
+-->
+<BR>
+
+<TABLE WIDTH="700" BORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="CENTER" VALIGN="TOP">
+
+<TR>
+<TD VALIGN="top" ALIGN="left" WIDTH="200">
+
+<TABLE WIDTH="200" BORDER="1" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver" ALIGN="center">
+<FONT FACE="arial" COLOR="black"><B>Table of Contents</B></FONT>
+</TD></TR>
+</TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="3" CELLSPACING="0"><TR><TD>
+<FONT FACE="arial" SIZE="-1">
+<BR>
+<CENTER><B>3D</B></CENTER>
+Creating a cutting-edge engine<BR>
+ &nbsp; <A HREF="Engine01.shtml">01 - Design document</A><BR>
+ &nbsp; <A HREF="Engine02.shtml">02 - Overall structure</A><BR>
+<BR>
+ &nbsp; <A HREF="Engine03.shtml">03 - Binary Space Partitioning</A><BR>
+ &nbsp; <A HREF="Engine04.shtml">04 - Constrctive Solid Geometry</A><BR>
+ &nbsp; <A HREF="Engine05.shtml">05 - Portals</A><BR>
+ &nbsp; <A HREF="Engine06.shtml">06 - Possible Visible Set</A><BR>
+ &nbsp; <A HREF="Engine07.shtml">07 - Radiosity lighting</A><BR>
+ &nbsp; <!--A HREF="Engine08.shtml"-->08 - Mirrors</A><BR>
+<BR>
+<!--A HREF="Dictionary.shtml"-->Dictionary of 3D terms</A><BR>
+<BR>
+<CENTER><B>OTHER</B></CENTER>
+<!--A HREF="GeneticAlgorithm.shtml"-->A Genetic Algorithm</A><BR>
+<A HREF="Line01.shtml">Line drawing</a><BR>
+<!--A HREF="Line02.shtml"-->Line clipping</a><BR>
+<!--A HREF="Line03.shtml"-->Line antialiasing</a><BR>
+<!--A HREF="Line04.shtml"-->Line thickening</a><BR>
+<!--A HREF="Line05.shtml"-->Line curving</a><BR>
+<br>
+<A HREF="ResourcesPrint.shtml">Resources in print</A><BR>
+<A HREF="ResourcesWeb.shtml">Resources on the web</A><BR>
+<!--A HREF="ResourcesFiles.shtml"-->Resources to download</A><BR>
+<BR>
+</FONT>
+</TD></TR></TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR><TD HEIGHT="3160"></TD></TR>
+<TR><TD ALIGN="left"><FONT FACE="arial" SIZE="-2">Test data results:</FONT><br>
+<img src="line0103.jpg" width="110" height="210" alt="I can see the music!" border="0">
+</TD></TR>
+</TABLE>
+</TD>
+<TD VALIGN="top" ALIGN="right" WIDTH="500">
+
+<TABLE WIDTH="475" BORDER="0" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver">
+<FONT FACE="arial"><B>Line Drawing</B></FONT>
+</TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-1">
+Funny thing, every time I have been interviewed for a game programming job, I've been asked to write
+ out <i>longhand</i> a line drawing algo.  I've watched the people I was being tested with fumble over
+ this one for a while and then quietly asked "do you want me to write all the special cases, too?"  The
+ point I'm making is that line drawing is one of those things you're going to need to learn just so
+ you can say you know it.  Thought that you could avoid that kind of thing by being a coder, eh?  HAR
+ HAR HAR!  *actually falls down he's laughing so hard*<br>
+<br>
+<hr>
+Note:  For the remainder of this tutorial the following values will be used:<br>
+<ul>
+<li><b>pBuf</b>: a pointer to the buffer to write to
+<li><b>bWidth</b>: the buffer width, in pixels
+<li><b>bHeight</b>: the buffer height, in pixels
+<li><b>Ax, Ay</b>: the starting coordinates of the line (whole numbers)
+<li><b>Bx, By</b>: the ending coordinates of the line (whole numbers)
+</ul>
+It is also assumed that the buffer is a single contiguous block of memory begining in the top left
+ corner and moving left to right, top to bottom.
+<hr>
+<br>
+Line drawing can be as simple or as complicated as you want it to be.  Let's start with a few
+ fundamentals.  The first thing we can do is simplify our problem by only drawing from left to right.<br>
+</font>
+<pre>
+<font color="Blue">if</font><font color="Navy">(</font> Ax <font color="Navy">></font> Bx <font color="Navy">) {</font>
+  <font color="Blue">int</font> c<font color="Navy">;</font>
+
+  c <font color="Navy">=</font> Ax<font color="Navy">;</font>
+  Ax <font color="Navy">=</font> Bx<font color="Navy">;</font>
+  Bx <font color="Navy">=</font> c<font color="Navy">;</font>
+  c <font color="Navy">=</font> Ay<font color="Navy">;</font>
+  Ay <font color="Navy">=</font> By<font color="Navy">;</font>
+  By <font color="Navy">=</font> c<font color="Navy">;</font>
+<font color="Navy">}</font>
+</pre>
+<font face="arial" size="-1">
+Not to hard and it means we only need to consider a few cases.<br>
+<br>
+<center><img src="line0101.jpg" width="200" height="200" alt="the cases" border="0"></center>
+<br>
+So the cases are:<br>
+<ul>
+<li>y=0 (horizontal line)
+<li>x=0, y=+/-n (vertical lines)
+<li>x=y, x=-y (diagonal lines)
+<li>x &gt; | y | (between x=y and x=-y)
+<li>| y | &gt; x (everything else, duh)
+</ul>
+Do you see why there are 4 special cases?  It all has to do with the slope of the line.  As long as you
+ remember "slope of the line, slope of the line" (if you build it, they will come) you can derive all of
+ this stuff over again.<br>
+<hr>
+<b>Case 1:</b> y = 0<br>
+</font>
+<pre>
+pBuf <font color="Navy">+=</font> Ay <font color="Navy">*</font> bWidth <font color="Navy">+</font> Ax<font color="Navy">;</font>
+<font color="Blue">for</font><font color="Navy">(</font> <font color="Blue">int</font> i <font color="Navy">=</font> Ax<font color="Navy">;</font> i <font color="Navy">&lt;=</font> Bx<font color="Navy">;</font> i<font color="Navy">++ )</font> <font color="Navy">*</font>pBuf<font color="Navy">++ =</font> pixelColor<font color="Navy">;</font>
+</pre>
+<font face="arial" size="-1">
+<i>OOH</i>, that was so big and <i>scary</i>, wasn't it boys and girls? (Wallace, stop poking Suzie.
+ And while you're at it, stop touching her, too.)<br>
+<hr>
+<b>Case 2:</b> x = 0<br>
+</font>
+<pre>
+int dir;
+
+<font color="Blue">if</font><font color="Navy">(</font> Ay <font color="Navy">&gt;</font> By <font color="Navy">) {</font>
+  <font color="Blue">int</font> c<font color="Navy">;</font>
+
+  c <font color="Navy">=</font> Ay<font color="Navy">;</font>
+  Ay <font color="Navy">=</font> By<font color="Navy">;</font>
+  By <font color="Navy">=</font> c<font color="Navy">;</font>
+  dir <font color="Navy">=</font> -bWidth<font color="Navy">;</font>
+<font color="Navy">}</font> <font color="Blue">else</font> dir <font color="Navy">=</font> bWidth<font color="Navy">;</font>
+
+pBuf <font color="Navy">+=</font> Ay <font color="Navy">*</font> bWidth <font color="Navy">+</font> Ax<font color="Navy">;</font>
+<font color="Blue">for</font><font color="Navy">(</font> <font color="Blue">int</font> i <font color="Navy">=</font> Ay<font color="Navy">;</font> i <font color="Navy">&lt;=</font> By<font color="Navy">;</font> i<font color="Navy">++ ) {</font>
+  <font color="Navy">*</font>pBuf <font color="Navy">=</font> pixelColor<font color="Navy">;</font>
+  pBuf <font color="Navy">+=</font> dir<font color="Navy">;</font>
+<font color="Navy">}</font>
+</pre>
+<font face="arial" size="-1">
+<hr>
+<b>Case 3:</b> x = | y |<br>
+</font>
+<pre>
+<font color="Blue">int</font> dir<font color="Navy">;</font>
+
+dir <font color="Navy">=</font> Ay <font color="Navy">&lt;</font> By <font color="Navy">?</font> bWidth <font color="Navy">:</font> -bWidth<font color="Navy">;</font>
+
+pBuf <font color="Navy">+=</font> Ay <font color="Navy">*</font> bWidth <font color="Navy">+</font> Ax<font color="Navy">;</font>
+<font color="Blue">for</font><font color="Navy">(</font> <font color="Blue">int</font> i <font color="Navy">=</font> Ax<font color="Navy">;</font> i <font color="Navy">&lt;=</font> Bx<font color="Navy">;</font> i<font color="Navy">++ ) {</font>
+  <font color="Navy">*</font>pBuf <font color="Navy">=</font> pixelColor<font color="Navy">;</font>
+  pBuf <font color="Navy">+=</font> 1 <font color="Navy">+</font> dir<font color="Navy">;</font>
+<font color="Navy">}</font>
+</pre>
+<font face="arial" size="-1">
+Talk about a shocking difference, hey what?  This time I took the if statement out of the loop so as to gain (a
+ small) speed boost.  Anywhere you can gain a speed boost without making your code too confusing, go for it.
+ <i>Mheh, must have more ...SPEED</i>.<br><br>
+For those of you have have never seen the version of if then else written as ( case ? true : false ), well,
+ it's real code, it will run.  Not that I reccomend it.<br>
+<hr>
+<b>Case 4:</b> x &gt; | y |<br>
+</font>
+<pre>
+<font color="Blue">double</font> slope<font color="Navy">,</font> counter<font color="Navy">;</font>
+<font color="Blue">int</font> dir<font color="Navy">;</font>
+
+counter <font color="Navy">=</font> <font color="red">0.0</font><font color="Navy">;</font>
+slope <font color="Navy">=</font> abs<font color="Navy">(</font> By <font color="Navy">-</font> Ay <font color="Navy">) / (</font> Bx <font color="Navy">-</font> Ax <font color="Navy">);</font>
+dir <font color="Navy">=</font> Ay <font color="Navy">&lt;</font> By <font color="Navy">?</font> bWidth <font color="Navy">:</font> -bWidth<font color="Navy">;</font>
+
+pBuf <font color="Navy">+=</font> Ay <font color="Navy">*</font> bWidth <font color="Navy">+</font> Ax<font color="Navy">;</font>
+<font color="Blue">for</font><font color="Navy">(</font> <font color="Blue">int</font> i <font color="Navy">=</font> Ax<font color="Navy">;</font> i <font color="Navy">&lt;=</font> Bx<font color="Navy">;</font> i<font color="Navy">++ ) {</font>
+  <font color="Navy">*</font>pBuf <font color="Navy">=</font> pixelColor<font color="Navy">;</font>
+  pBuf<font color="Navy">++;</font>
+  counter <font color="Navy">+=</font> slope<font color="Navy">;</font>
+  <font color="Blue">if</font><font color="Navy">(</font> counter <font color="Navy">&gt;=</font> <font color="red">1.0</font> <font color="Navy">) {</font>
+    counter <font color="Navy">-=</font> <font color="red">1.0</font><font color="Navy">;</font>
+    pBuf <font color="Navy">+=</font> dir<font color="Navy">;</font>
+  <font color="Navy">}</font>
+<font color="Navy">}</font>
+</pre>
+<font face="arial" size="-1">
+Let's break that down and see what it does:<br>
+<ol>
+<li>Move the pBuf pointer to the start of the line.
+<li>Find the slope of the line, that is to say the change in <b>y</b> vs. the change in <b>x</b>.
+  We want this because line line move more in the x direction than the y direction.<br>
+<br>
+<center><img src="line0102.jpg" width="200" height="200" alt="x vs y" border="0"></center>
+<br>
+If the change in x were more than the change in y then we'd want to draw a certain number of pixels in
+ a horizontal line, move in the y direction by 1 and then repeat until we get to the end.  But how often
+ do we move in the y direction?  Put another way, how many pixels do we draw before we move up or down?
+ The slope of the line is the key.  Think about it: when the line is horizontal, the slope is 0 (there
+ is no change in x) so we just draw a straight line.  When the line is diagonal, the slope is 1 so y is
+ incremented every loop, at the same speed as x.  So in between x=0 and x=y it's the slope of the line
+ that tells us when to move in the y direction.  Why?  Because we're looking for (y/x)*n >= 1.
+ Remember: the slope (y/x) will ALWAYS be less than 1 in this case.
+<li>Loop for the x length of the line.  Every time through the loop increment x and add to a counter the
+ slope.  When the counter reaches 1, subtract 1 and move in the y direction.
+</ol>
+<hr>
+<b>Case 5:</b> | y | &gt; x<br>
+</font>
+<pre>
+<font color="Blue">int</font> counter<font color="Navy">,</font> dy<font color="Navy">,</font> dx<font color="Navy">,</font> dir<font color="Navy">;</font>
+
+counter <font color="Navy">=</font> <font color="red">0</font><font color="Navy">;</font>
+dx <font color="Navy">=</font> Bx <font color="Navy">-</font> Ax<font color="Navy">;</font>
+dy <font color="Navy">=</font> abs<font color="Navy">(</font> Ay <font color="Navy">-</font> By <font color="Navy">);</font>
+dir <font color="Navy">=</font> Ay <font color="Navy">&lt;</font> By <font color="Navy">?</font> bWidth <font color="Navy">:</font> -bWidth<font color="Navy">;</font>
+
+pBuf <font color="Navy">+=</font> Ay <font color="Navy">*</font> bWidth <font color="Navy">+</font> Ax<font color="Navy">;</font>
+<font color="Blue">for</font><font color="Navy">(</font> <font color="Blue">int</font> i <font color="Navy">=</font> <font color="red">0</font><font color="Navy">;</font> i <font color="Navy">&lt;=</font> dy<font color="Navy">;</font> i<font color="Navy">++ ) {</font>
+  <font color="Navy">*</font>pBuf <font color="Navy">=</font> pixelColor<font color="Navy">;</font>
+  pBuf <font color="Navy">+=</font> dir<font color="Navy">;</font>
+  counter <font color="Navy">+=</font> dx<font color="Navy">;</font>
+  <font color="Blue">if</font><font color="Navy">(</font> counter <font color="Navy">&gt;=</font> dy <font color="Navy">) {</font>
+    counter <font color="Navy">-=</font> dy<font color="Navy">;</font>
+    pBuf<font color="Navy">++;
+  }
+}</font>
+</pre>
+<font face="arial" size="-1">
+<ol>
+<li>Move the pBuf pointer to the start of the line.
+<li>Find the inverse slope of the line, that is to say the change in <b>x</b> vs. the change in <b>y</b>.
+  We want this because y changes faster than x.<br>
+<li>loop for the y length of the line.  Increment y every step, increment x when appropriate.
+</ol>
+There was only one more optimization I could make and that was to remove all the
+ <font color="Blue">double</font>s from the loops.  Why did this work?  In case 4 we were looking for
+ (A/B)*N >= 1, when I didn't know what N was.  In case 5 I rearranged the variables so that I was
+ looking for A*N >= B which is the same thing but it dosen't require a floating point number so not only
+ is it faster but it's guaranteed to be more accurate out somewhere near the 12th decimal place (:
+ You can and should do this same thing for both case 4 and case 5, I did it this way to smooth the
+ learning curve.
+<hr>
+Now, just for the sake of argument, you <i>could</i> make a single loop to do all the different kinds
+ of line drawing.  It wouldn't be as fast and it'd be a lot harder to read, but it would run.  First of
+ all, you'd need to separate the x and y components as suggested earlier.  Then before the loop you'd
+ have to set up everything in generic terms like a and b instead of x and y.  You'd also need an
+ incrementA and incrementB so that
+</font><pre>
+<font color="blue">while</font><font color="Navy">(</font> counter <font color="Navy">&gt;=</font> db <font color="Navy">) {</font>
+  counter <font color="Navy">-=</font> db<font color="Navy">;</font>
+  pBuf <font color="Navy">+=</font> incrementA<font color="Navy">;</font>
+<font color="Navy">}</font>
+</pre><font face="arial", size="-1">
+<hr>
+Some tips for debugging your line drawing functions:<br>
+<ul>
+<li><b>Test each case</b>.  I drew each of the following lines one at a time on the screen in 32 bit color depth.<br>
+<pre>
+<font color="blue">#define</font> MAKECOLOR32<font color="Navy">(</font> x<font color="Navy">,</font> y<font color="Navy">,</font> z <font color="Navy">)   ( (</font> x &lt;&lt; <font color="red">16</font> <font color="Navy">) + (</font> y &lt;&lt; <font color="red">8</font> <font color="Navy">) + (</font> z <font color="Navy">) )</font>
+
+Line<font color="Navy">(</font><font color="red">5</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font>   <font color="red">5</font><font color="Navy">,</font>   <font color="red">5</font><font color="Navy">,</font> MAKECOLOR32<font color="Navy">(</font> <font color="red">0xff</font><font color="Navy">,</font> <font color="red">0x00</font><font color="Navy">,</font> <font color="red">0x00</font> <font color="Navy">) );</font>  <font color="green">// red</font>
+Line<font color="Navy">(</font><font color="red">5</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font>  <font color="red">55</font><font color="Navy">,</font>   <font color="red">5</font><font color="Navy">,</font> MAKECOLOR32<font color="Navy">(</font> <font color="red">0x00</font><font color="Navy">,</font> <font color="red">0xff</font><font color="Navy">,</font> <font color="red">0x00</font> <font color="Navy">) );</font>  <font color="green">// green</font>
+Line<font color="Navy">(</font><font color="red">5</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font>   <font color="red">5</font><font color="Navy">,</font> MAKECOLOR32<font color="Navy">(</font> <font color="red">0x00</font><font color="Navy">,</font> <font color="red">0x00</font><font color="Navy">,</font> <font color="red">0xff</font> <font color="Navy">) );</font>  <font color="green">// blue</font>
+Line<font color="Navy">(</font><font color="red">5</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font> <font color="red"> 55</font><font color="Navy">,</font> MAKECOLOR32<font color="Navy">(</font> <font color="red">0xff</font><font color="Navy">,</font> <font color="red">0xff</font><font color="Navy">,</font> <font color="red">0x00</font> <font color="Navy">) );</font>  <font color="green">// yellow</font>
+Line<font color="Navy">(</font><font color="red">5</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font> MAKECOLOR32<font color="Navy">(</font> <font color="red">0xff</font><font color="Navy">,</font> <font color="red">0x00</font><font color="Navy">,</font> <font color="red">0xff</font> <font color="Navy">) );</font>  <font color="green">// purple</font>
+Line<font color="Navy">(</font><font color="red">5</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font> <font color="red">155</font><font color="Navy">,</font> MAKECOLOR32<font color="Navy">(</font> <font color="red">0x00</font><font color="Navy">,</font> <font color="red">0xff</font><font color="Navy">,</font> <font color="red">0xff</font> <font color="Navy">) );</font>  <font color="green">// aqua</font>
+Line<font color="Navy">(</font><font color="red">5</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font> <font color="red">205</font><font color="Navy">,</font> MAKECOLOR32<font color="Navy">(</font> <font color="red">0xff</font><font color="Navy">,</font> <font color="red">0xff</font><font color="Navy">,</font> <font color="red">0xff</font> <font color="Navy">) );</font>  <font color="green">// white</font>
+Line<font color="Navy">(</font><font color="red">5</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font>  <font color="red">55</font><font color="Navy">,</font> <font color="red">205</font><font color="Navy">,</font> MAKECOLOR32<font color="Navy">(</font> <font color="red">0xaa</font><font color="Navy">,</font> <font color="red">0xaa</font><font color="Navy">,</font> <font color="red">0xaa</font> <font color="Navy">) );</font>  <font color="green">// grey 1</font>
+Line<font color="Navy">(</font><font color="red">5</font><font color="Navy">,</font> <font color="red">105</font><font color="Navy">,</font>   <font color="red">5</font><font color="Navy">,</font> <font color="red">205</font><font color="Navy">,</font> MAKECOLOR32<font color="Navy">(</font> <font color="red">0x55</font><font color="Navy">,</font> <font color="red">0x55</font><font color="Navy">,</font> <font color="red">0x55</font> <font color="Navy">) );</font>  <font color="green">// grey 2</font>
+</pre>
+<li><b>If you don't separate the dx and dy variables in case 5</b>, make sure that your
+ <font color="Blue">for</font><font color="Navy">()</font> loop goes from <font color="red">0</font> to
+ <font color="Navy">&lt;=</font> abs<font color="Navy">(</font> dy <font color="Navy">)</font> or else
+ you will be unable to draw lines that slope sharply upwards.
+<li><b>If you don't separate the dx and dy variables and your slope calculation is returning zero</b> it's
+ because you have a compiler that employs strict typecasting.  You need to calculate the slope as<br>
+slope <font color="Navy">= (</font><font color="Blue">double</font><font color="Navy">)</font>abs<font color="Navy">(</font> By <font color="Navy">-</font> Ay <font color="Navy">) / (</font><font color="Blue">double</font><font color="Navy">)(</font> Bx <font color="Navy">-</font> Ax <font color="Navy">);</font>
+</ul>
+<hr>
+That covers all your basic line drawing needs...provided you don't need to clip to screen dimensions, or
+ draw a line of thickness greater than 1, or antialias the line, or draw a curved line, or use
+ coordinates that are floating point numbers or a hundred other things...<br>
+<br>
+<a href="#top">Back to the top</a><br>
+<hr>
+<b>NEXT: <!--a href="Line02.shtml"-->Line clipping</a></b><br>
+<BR><BR></FONT>
+</TD></TR></TABLE>
+</TD>
+</TR>
+
+</TABLE>
+
+<HR ALIGN="CENTER" SIZE="1" WIDTH="700" NOSHADE>
+<FONT FACE="arial" SIZE="-2">All photos copyright of their respective owners.  All other content of this website is &copy; 1997-1999 Dan Royer.<BR>
+Designed for IE 5.0+, 800x600x16 or greater.  Some pages use style sheets.<br>
+<A HREF="http://members.home.com/droyer/index.html"
+   TITLE="Dan's Homepage">http://members.home.com/droyer/index.html</A><br>
+</FONT>
+
+</CENTER>
+<BR>
+<BR>
+
+</BODY>
+</HTML>
+</html>

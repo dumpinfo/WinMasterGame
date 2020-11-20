@@ -1,0 +1,165 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>Texture Mapping Mania</TITLE>
+<META NAME="Template" CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080">
+
+<B><FONT SIZE=5><P>Texture Mapping Mania</P>
+</B></FONT><FONT SIZE=2><P>by Andre' LaMothe</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>A long time ago in a galaxy far, far away, there were only flat shaded 3D games and engines... Today, if your product doesn't support texture mapping then it's probably going to end up in the bargain bin right next to yet another version of <I>Defender.</I> Not only is texture mapping expected these days, it's possible in real-time. And it can be accomplished totally in software which makes it nice for programmers. Now the bad news...Texture mapping is actually a very complex subject especially when you start talking about perspective correct, Mip-Mapped, light interpolated, alpha channeled, texture mapping. </P>
+</FONT><P><IMG SRC="Image47.gif" WIDTH=576 HEIGHT=432><FONT SIZE=2>In this article, we are going to cover the most basic form of texture mapping which is referred to as "affine" texture mapping. An affine transformation means that it preserves quantities, thus as one image is mapped onto another and there is a one to one relationship, that is, no warping. In the realm of texture mapping, affine mapping usually means throwing away the 3D information all together and performing a simple 2D mapping. Perspective texture mapping on the other hand, takes the Z coordinate of a 3D polygon definition into consideration hence the perspective warping into consideration that occurs in a 3D space and uses this information to perform the texture mapping in a more visually correct way. Figure 1.0 shows the difference between a affine texture mapped polygon and a perspective correct texture mapped polygon. Notice how the perspective correct image looks more realistic. </P>
+<P>The problem with perspective correct texture mapping is that it takes 2 divisions per pixel. Of course, you can approximate perspective correct texture mapping with what is referred to as "perspective correct-ed" texture mapping, by only computing the perspective every few pixels and then affine texture mapping (or linearly interpolating) in-between. But again this is only an approximation, and you must affine texture map in the middle.</P>
+<P>The point is, the ultimate goal is to create a perspective corrected texture mapper with all the toppings. But, you have to start somewhere, and affine texture mapping is a good place since many of the concepts apply to other aspects of 3D rendering such as light interpolation and other sampling type operations. In fact, texture mapping is really nothing more than an application of sampling theory. That's what we're doing, sampling one data set and projecting or mapping it into another. But, enough talk, let's get to it shall we! </P>
+</FONT><B><FONT SIZE=4><P>What's In It For Me?</P>
+</B></FONT><FONT SIZE=2><P>Before we get started on the math and the code, I want to give you an idea of what exactly you're going to get. By the end of this article you'll have all you need including the working source code for an affine texture mapper that can texture map a rectangular bitmap texture that's 64x64 pixels in 256 colors onto a triangular polygon with full texture coordinate support. In addition, I'm going to give you a full working demo that loads in some texture maps and draws thousands of textured triangles a second on the screen. The demo will be in DirectX since the DirectX SDK is readily available and DirectX is the easiest 32 bit platform these days and the one any graphics programmer on the PC should be using. But if you're working on another system then the ideas and concepts are absolutely applicable and the texture mapper is in straight C, so it's totally portable.</P>
+</FONT><P><IMG SRC="Image48.gif" WIDTH=576 HEIGHT=432></P>
+<B><FONT SIZE=4><P>Getting Down To Specifics </P>
+</B></FONT><FONT SIZE=2><P>Figure 2.0 shows the exact process that we want to implement. We want to texture map a rectangular bitmap that is 64x64 pixels in 256 colors (1 byte per pixel) onto an arbitrary triangle with any coordinates. This means that we need a way to take rotation and scaling of the triangle into consideration. To help design the algorithm, I have labeled a number of points of interest on Figure 2.0. First, you'll see that the destination triangle is made up of 3 vertices, these have been labeled p0, p1, and p2, with coordinates (x0, y0), (x1, y1), and (x2, y2) respectively. In addition, I have labeled the axes around the texture map as U and V, where U is the horizontal axis and V is the vertical axis. Note that both U and V range from (0,0) in the upper left hand corner to (63,63) in the lower right hand corner.</P>
+</FONT><P><IMG SRC="Image49.gif" WIDTH=576 HEIGHT=432></P>
+<FONT SIZE=2><P>What we want to do is come up with an algorithm that samples the texture map, so that the sampled pixels can be used to color each pixel of each scanline of the target triangle polygon as it is being rendered. Hold on a minute! What's all this about rendering triangles? We'll, the point of texture mapping is to draw or render a triangle with the texture on it, but to draw a textured triangle. I guess we better take a quick look at how to draw an non-textured single color triangle huh? Take a look at Figure 3.0 here you see the various cases of triangles that can possibly exist. There are:</P>
+<P>Type 1: Flat Top &#9;&#9;- A triangle with a flat top.</P>
+<P>Type 2: Flat Bottom &#9;- A triangle with a flat top.</P>
+<P>Type 3: General &#9;&#9;- A general triangle with neither a flat top or bottom.</P>
+<P>&nbsp;</P>
+<P>However, the general triangle is really made up of a triangle with a flat top, and one with a flat bottom. So if we can draw Type 1 and 2 triangles then Type 3 is easy. So let's focus on Type 2, from it you can figure out how to do Type 1 since it's the same as Type 2, just upside down.</P>
+</FONT><P><IMG SRC="Image50.gif" WIDTH=576 HEIGHT=432></P>
+<B><FONT SIZE=4><P>Interpolate Me Baby!</P>
+</B></FONT><FONT SIZE=2><P>There are a number of ways to draw triangles including tracing the two edges of the triangle with a line drawing algorithm such as Bresenham's or with simple interpolation. I prefer interpolation since it's more straight forward. Let's see how this works. Take a look at Figure 4.0, all we have to do is find the points that make up the integer rasterized version of the triangle. These points are shown in the figure as little dots. Once we find these dots for each scanline the makes up the triangle then drawing the triangle is nothing more than performing a simple memory fill from dot to dot as shown in Figure 4.0.</P>
+<P>Finding these points is nothing more than interpolating the slope (well almost) of each side of the triangle. The interpolation is done as follows:</P>
+<P>We know that the height of the triangle is:</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>dy = (y2 - y0) ; </P>
+</FONT><FONT SIZE=2><P>And the difference in X's between the lower left vertex and the lower right vertex is:</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>dx_left_side &#9;= (x2 - x0); </P>
+<P>dx_right_side &#9;= (x1 - x0); </P>
+</FONT><FONT SIZE=2><P>Thus, the slope of the left hand side is:</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>slope_left_side = dy/dx_left_side = (y2 - y0)/(x2 - x0);</P>
+</FONT><FONT SIZE=2><P>And, the slope of the right hand side is:</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>slope_right_side = dy/dx_right_side = (y2 - y0)/(x1 - x0);</P>
+</FONT><FONT SIZE=2><P>However, we don't exactly want the slope. The slope is the "change in Y per change in X". This means that if we were to move over exactly one pixel in the X direction then the Y would change by the slope. We don't want this, we want the opposite, or dx/dy. This is because we are drawing the triangle scan line by scan line and incrementing Y each time, hence dy = 1 which is a constant, thus:</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>dx_left_side = 1 * (x2 - x0)/(y2 - y0);</P>
+</FONT><FONT SIZE=2><P>and,</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>dx_right_side = 1 * (x1 - x0)/(y2 - y0);</P>
+</FONT><FONT SIZE=2><P>That's it! That's the entire triangle drawing algorithm for a flat bottom Type 2 triangle. Type 1 is similar and I leave up to you. Take a look at Listing 1.0 for a pseudo-code implementation of the triangle drawing algorithm.</P>
+<P>Listing 1.0 - Pseudo Code Implementation of Triangle Renderer</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>void Draw_Triangle(float x0,float y0,float x1,float y1,float x2,float y2, int color)</P>
+<P>{</P>
+<P>// this function rasterizes a triangle with a flat bottom</P>
+<P>// compute left side interpolant</P>
+<P>float dx_left = (x2 - x0)/(y2 - y0);</P>
+<P>// compute right side interpolant</P>
+<P>float dx_right = (x1 - x0)/(y2 - y0);</P>
+<P>// seed left and right hand interpolators</P>
+<P>float x_left = x0; </P>
+<P>float x_right = x0;</P>
+<P>// enter into rasterization loop</P>
+<P>for (int y=y0; y&lt;=y1; y++)</P>
+<P>{</P>
+<P>// draw the scanline</P>
+<P>Draw_Line(x_left, x_right, y, color); </P>
+<P>// advance interpolants</P>
+<P>x_left+=dx_left;</P>
+<P>x_right+=dx_right;</P>
+<P>} // end for y</P>
+<P>} // end Draw_Triangle</P>
+</FONT><FONT SIZE=2><P>At this point you've seen how interpolation can be used to sample something and draw it. Granted in this case, we didn't actually sample anything more than a single color, but we could of! But the point is that we used the vertical and horizontal deltas for each of the triangle sides to figure out how much to step each vertical scanline step. Hence, the correct X position was what we were interpolating. Get it? </P>
+<P>It's very important that you understand the idea of interpolating since the entire texture mapping algorithm is based on it, so take you time and work through the example above with some real numbers to get a better feel for it. I always like to try an algorithm with real numbers for just a few iterations, to get a feel for it. Now let's move onto the using interpolation to texture map a one dimensional polygon and then move on to triangles in any orientation or scale.</P>
+</FONT><P><IMG SRC="Image51.gif" WIDTH=576 HEIGHT=432></P>
+<B><FONT SIZE=4><P>1-D Interpolations</P>
+</B></FONT><FONT SIZE=2><P>Texture mapping a triangle with a rectangular texture map is nothing more than a lot of interpolating, but there is so much interpolating that it's easy to make a mistake and or write a slow algorithm, so let's take our time and start with the simplest case in 1 dimension. Figure 5.0 illustrates the worlds simplest texture mapper, the texture mapping of a single vertical line. In Figure 5.0 we have a texture map that is exactly one pixel thick and 8 pixels high, we want to map this into a destination polygon that is exactly one pixel thick, but any height. How do we do this? Again sampling comes to the rescue. </P>
+<P>What we need to do is "sample" the texture map which in this case is a single 1x8 pixel bitmap and map it into the destination polygon which is 1xn pixels where n can range from 1 to infinity. Take a look at Figure 5.0 for the derivation of the following examples. </P>
+<B><P>Example 1</P>
+</B><P>As a first example, let's say that our destination polygon is 1x4 pixels. It makes sense that we want to sample the source texture every other pixel, as shown in the figure. Thus, if we select pixels (0,2,4,6) of the source texture and map them into the destination polygon at positions (0,1,2,3) then we are doing pretty good. But how did I arrive (0,2,4,6)? The answer is by using a <I>sampling ratio</I> which is nothing more than a an interpolation factor. Here's the math:</P>
+<P>In general,</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>sampling_ratio = source_height / destination_height</P>
+</FONT><FONT SIZE=2><P>Thus the sampling ratio is,</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>sampling_ratio = 8/4 = 2.</P>
+</FONT><FONT SIZE=2><P>Thus, every 1 pixel we move on the destination polygon in the vertical axis, we must move 2 pixels on the source to keep up. That's were the 2 comes from and hence the sampling sequence (0,2,4,6). If you're still with me then you should say wait a minute, we lost information! And indeed we did, we had to throw away half the pixels. This is definitely a problem with sampling on an integer matrix without any averaging. If you were writing a high end 3D modeler like 3D Studio MAX then you would probably average the pixels your sampling (area sampling), so as to get a better approximation, but for games and real-time our technique will do. Now let's see another example of the opposite case.</P>
+<B><P>Example 2</P>
+</B><P>In example 1, we saw that the source texture was compressed, that is, the destination was smaller than the source, thus information was lost. The second case of course would be when the destination is bigger than the source and there isn't enough information to go around. In this case, the source data must be sampled more than once and replicated. This is where all "chunkyness" comes from when texture mapped polygons get too close to you in a 3D game. There isn't enough texture data so some sample points are sampled many times creating big blocks. Anyway, referring to the second example in Figure 5.0, we see that the source is again 1x8, but this time the destination is 1x14 pixels, yuck! Obviously, we are going to need a fractional sampling ratio, but let's let the math do it:</P>
+<P>As usual,</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>sampling_ratio = source_height / destination_height;</P>
+</FONT><FONT SIZE=2><P>Thus the sampling ratio is,</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>sampling_ratio = 8/14 = 0.57</P>
+</FONT><FONT SIZE=2><P>Hence, every pixel we draw on the destination polygon we should sample it 0.57 units from the last sample point on the source. This gives us the following sample point sequence for destination pixels (0,1,2,3,....13): </P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>Sample 0: 0.57</P>
+<P>Sample 1: 1.14</P>
+<P>Sample 2: 1.71</P>
+<P>Sample 3: 2.28</P>
+<P>Sample 4: 2.85</P>
+<P>Sample 5: 3.42</P>
+<P>Sample 6: 3.99</P>
+<P>Sample 7: 4.56</P>
+<P>Sample 8: 5.13</P>
+<P>Sample 9: 5.7</P>
+<P>Sample 10: 6.27</P>
+<P>Sample 11: 6.84 </P>
+<P>Sample 12: 7.41</P>
+<P>Sample 13: 7.98</P>
+</FONT><FONT SIZE=2><P>And to get the actual sample points, we simply truncate the sample points in integer space or take the <I>floor</I> of each value resulting in the sample points (0,1,1,2,2,3,3,4,5,5,6,6,7,7) which sounds about right. Each point got sampled about 2 times, or 1/0.57 ~ 2.0. That's what I'm talking about!</P>
+</FONT><B><FONT SIZE=4><P>Multiple Interpolations</P>
+</B></FONT><FONT SIZE=2><P>When I wrote my first affine texture mapper I thought that something must be wrong since it seemed like I was interpolating everything, but the kitchen sink! However, the truth is, there is really no way around all the various interpolants, and in the end the inner loop for each pixel can be optimized into around 10 cycles per pixel on a Pentium which translates to a theoretical max of 10 - 20 million textels (textured pixels) per second on a Pentium 100mhz which in reality will be far less than that due to a million reasons such as the caches, memory bandwidth, video card, etc. Now, let's talk about the algorithm in general and then derive the math for it. </P>
+</FONT><P><IMG SRC="Image52.gif" WIDTH=576 HEIGHT=432></P>
+<FONT SIZE=2><P>The idea behind the algorithm is that we want to interpolate down the left and right edges of the triangle and draw each scanline strip as we go with the proper texture pixels. So what we need to do first is assign full texture coordinates to the vertices of the destination triangle to give us a frame of reference for the interpolants. Thus we must assign each vertex a (u,v) texture coordinate as shown in Figure 6.0. Therefore, each vertex has a total of 4 data components or it's a 4-D value -- weird huh? Moving on, let's talk about the range of the texture coordinates. Since our source texture map is 64x64 pixels that means that the texture coordinates must range from 0 - 63 for any vertex. This will map or stretch the texture map to each vertex.</P>
+</FONT><P><IMG SRC="Image53.gif" WIDTH=576 HEIGHT=432></P>
+<FONT SIZE=2><P>For example, in Figure 7.0 we see a couple examples: one triangle with the texture coordinates (0,0), (63,0), and (63,63) mapped to vertices 0,1, and 2 respectively. This basically copies half of the texture map to the destination triangle which is what we would expect. In the second example in Figure 7.0 we see the same texture mapped onto 2 triangles which are adjacent to each other forming a square. In this case, the texture coordinates are selected in such a way that half of the texture map is mapped to one triangle and the rest to the other, hence, a perfect texture wrapping around two triangles. Moreover, this is how you would make a quadrilateral, that is, with two triangles. Now that you have a visual on the problem and know the labeling from Figure 6.0, let's implement the algorithm mathematically. <I>Note that the variable names used in the following analysis are based on Figure 6.0 and the final program, so that you can follow the program code more easily.</P>
+</I><P>The left edge interpolants are:</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>dxdyl&#9;= (x2 - x0)/(y2 - y0); // the x interpolant for the left hand side</P>
+<P>dudyl &#9;= (u2 - u0)/(y2 - y0); // the u interpolant for the left hand side</P>
+<P>dvdyl &#9;= (v2 - v0)/(y2 - y0); // the v interpolant for the left hand side</P>
+</FONT><FONT SIZE=2><P>and similarly the right edge interpolants are,</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>dxdyr&#9;= (x1 - x0)/(y2 - y0); // the x interpolant for the right hand side</P>
+<P>dudyr &#9;= (u1 - u0)/(y2 - y0); // the u interpolant for the right hand side</P>
+<P>dvdyr &#9;= (v1 - v0)/(y2 - y0); // the v interpolant for the right hand side</P>
+</FONT><FONT SIZE=2><P>Of course, there's a lot of room for optimization in the math, for example, the term (y2 - y0) is common and need only be computed once, furthermore, it's better to compute the reciprocal of (y2 - y0) and then multiply, but you get the idea. Anyway, now that we have the interpolants we are almost ready to rock. The interpolants must be in reference to some starting point, right? This starting is the topmost vertex, vertex 0. Hence, we need to start the algorithm off like this:</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>xl = x0; // the starting point for the left hand side edge x interpolation</P>
+<P>ul = u0; // the starting point for the left hand side edge u interpolation</P>
+<P>vl = v0; // the starting point for the left hand side edge v interpolation</P>
+</FONT><FONT SIZE=2><P>And for the right hand side,</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>xr = x0; // the starting point for the right hand side edge x interpolation</P>
+<P>ur = u0; // the starting point for the right hand side edge u interpolation</P>
+<P>vr = v0; // the starting point for the right hand side edge v interpolation</P>
+</FONT><FONT SIZE=2><P>Now we are almost ready to go, we can interpolate down the left hand edge and the right edge with:</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>xl+=dxdyl;</P>
+<P>ul+=dudyl;</P>
+<P>vl+=dvdyl;</P>
+</FONT><FONT SIZE=2><P>and,</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>xr+=dxdyr;</P>
+<P>ur+=dudyr;</P>
+<P>vr+=dvdyr;</P>
+</FONT><FONT SIZE=2><P>But at each point on the left and right hand edge of the triangle we still need to perform once more linear interpolation across the scanline! This is the final interpolation and the one that will give us our texture coordinates (ui,vi) which we will use as [row, column] indices into the texture bitmap to obtain the textel. All we need to do is compute the u,v coordinate on the left and right side and then use the dx to compute a linear interpolation factor for each. Here's the math::</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>dx = (xend - xstart); // the difference or delta dx</P>
+<P>xstart = xl; &#9;&#9;// left hand starting point</P>
+<P>xend = xr; &#9;&#9;// right hand starting point</P>
+</FONT><FONT SIZE=2><P>Therefore, the interpolants across each scanline in u,v space are,</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>du = (ul - ur)/dx; </P>
+<P>dv = (vl - vr)/dx;</P>
+</FONT><FONT SIZE=2><P>Then with du,dv, we have everything we need to interpolate across the scanline at vertical position y from xstart to xend. Here's a code fragment:</P>
+</FONT><FONT FACE="Courier New" SIZE=1><P>// initialize u,v interpolants to left and right hand side values</P>
+<P>ui = ul;</P>
+<P>vi = vl;</P>
+<P>// now interpolate from left to right, i.e, in a positive x direction</P>
+<P>for (x = xstart; x &lt;= xend; x++)</P>
+<P>{</P>
+<P>// get texture pixel value</P>
+<P>pixel = texture_map[ui][vi];</P>
+<P>// plot pixel at x,y</P>
+<P>Plot_Pixel(x,y,pixel);</P>
+<P>// advance u,v interpolants</P>
+<P>ui+=du; </P>
+<P>vi+=dv;</P>
+<P>} // end for x</P>
+</FONT><FONT SIZE=2><P>That's it. Of course for the outer loop you would still interpolate xl,ul,vl,xr,ur,vr down the triangle edges for each scanline of the triangle. </P>
+<P>The final code for the texture mapper is shown in Listing 2.0 and 3.0, the function assumes a specific input data structure and that the texture map is a linear bitmap 64x64 pixels, but other than that, it's nothing more than an implementation of our derivation here along with all the triangle cases, and clipping, so it doens't blow up. In addition, Listing 4.0 is a complete DirectX demo of the texture mapper in action. It draws random triangles all over the screen in 640x480x256. </P>
+<B><P>Listing 2.0 - Header file for Affine texture mapper. <U>(production insert tmapper.h)</P>
+</U><P>Listing 3.0 - Affine texture mapper.</B> <B><U>(production - insert tmapper.cpp)</P>
+</U><P>Listing 4.0 - A complete DirectX demo of the texture mapper.</B> <B><U>(production - insert tmapdemo.cpp)</P>
+</B></U><P>If you don't want to type the code, you can find it along with the executable within <B>TMAPSRC.ZIP </B>which you can download from <B><U>(production insert FTP url here). </B></U>In addition, the demo uses fixed point math even though we used floating point here. I have found that all math should be done using floating point, until final rasterization (as in this case) since the conversion from floating point to integer and visa-versa kills you. Finally, as a test of the texture mapper, I gave it to a friend of mine -- <B>Jarrod Davis</B> and he created a 3D demo by adding the texture mapper to his flat shaded 3D engine, thanks Jarrod. The demo is called <B>BOX2.EXE</B> and is within the <B>TMAPSRC.ZIP</B> archive file as well, so enjoy.</P>
+<P>Well, that's it for texture mapping. Maybe next time we can talk about lighting those texture mapped polygons...</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P></FONT></BODY>
+</HTML>

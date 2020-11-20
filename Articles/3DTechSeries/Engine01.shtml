@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<HTML>
+<HEAD>
+	<TITLE>Dan's Tutorials: 01 - Design document</TITLE>
+	<LINK REL="stylesheet" HREF="tutorial_styles.css">
+</HEAD>
+
+<BODY BGCOLOR="white">
+<a name="top"></a>
+<BR>
+<CENTER>
+<!--
+<br>
+<DIV CLASS="main1">DAN'S</div><div class="main2">Programming Tutorials</DIV>
+<br>
+<TABLE WIDTH="700" BORDER="0" CELLPADDING="5" CELLSPACING="0">
+<TR><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+[</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="index.shtml">news</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+tutorials</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<!--A HREF="Files.shtml"--><!--files</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<a href="ResourcesWeb.shtml">links</a></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+|</B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center" WIDTH="100"><FONT FACE="arial" COLOR="white"><B>
+<A HREF="Contact.shtml">contact</A></B></FONT>
+</TD><TD BGCOLOR="black" ALIGN="center" VALIGN="center"><FONT FACE="arial" COLOR="white"><B>
+]</B></FONT>
+</TD></TR>
+</TABLE>
+-->
+<BR>
+
+<TABLE WIDTH="700" BORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="CENTER" VALIGN="TOP">
+
+<TR>
+<TD VALIGN="top" ALIGN="left" WIDTH="200">
+
+<TABLE WIDTH="200" BORDER="1" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver" ALIGN="center">
+<FONT FACE="arial" COLOR="black"><B>Table of Contents</B></FONT>
+</TD></TR>
+</TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="3" CELLSPACING="0"><TR><TD>
+<FONT FACE="arial" SIZE="-1">
+<BR>
+<CENTER><B>3D</B></CENTER>
+Creating a cutting-edge engine<BR>
+ &nbsp; <A HREF="Engine01.shtml">01 - Design document</A><BR>
+ &nbsp; <A HREF="Engine02.shtml">02 - Overall structure</A><BR>
+<BR>
+ &nbsp; <A HREF="Engine03.shtml">03 - Binary Space Partitioning</A><BR>
+ &nbsp; <A HREF="Engine04.shtml">04 - Constrctive Solid Geometry</A><BR>
+ &nbsp; <A HREF="Engine05.shtml">05 - Portals</A><BR>
+ &nbsp; <A HREF="Engine06.shtml">06 - Possible Visible Set</A><BR>
+ &nbsp; <A HREF="Engine07.shtml">07 - Radiosity lighting</A><BR>
+ &nbsp; <!--A HREF="Engine08.shtml"-->08 - Mirrors</A><BR>
+<BR>
+<!--A HREF="Dictionary.shtml"-->Dictionary of 3D terms</A><BR>
+<BR>
+<CENTER><B>OTHER</B></CENTER>
+<!--A HREF="GeneticAlgorithm.shtml"-->A Genetic Algorithm</A><BR>
+<A HREF="Line01.shtml">Line drawing</a><BR>
+<!--A HREF="Line02.shtml"-->Line clipping</a><BR>
+<!--A HREF="Line03.shtml"-->Line antialiasing</a><BR>
+<!--A HREF="Line04.shtml"-->Line thickening</a><BR>
+<!--A HREF="Line05.shtml"-->Line curving</a><BR>
+<br>
+<A HREF="ResourcesPrint.shtml">Resources in print</A><BR>
+<A HREF="ResourcesWeb.shtml">Resources on the web</A><BR>
+<!--A HREF="ResourcesFiles.shtml"-->Resources to download</A><BR>
+<BR>
+</FONT>
+</TD></TR></TABLE>
+
+<TABLE WIDTH="200" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR><TD HEIGHT="255"></TD></TR>
+<TR><TD ALIGN="left"><FONT FACE="arial" SIZE="-2">
+<B>Good advice:</B><UL>
+<LI>Strip mining prevents forest fires.<BR>
+<LI>Dress in layers for half an hour before you get in the pool.<BR>
+<LI>You can pick your friends,<BR>
+you can pick your nose.<BR>
+But don't pick your friends' nose.
+</UL>
+<B>Bad advice:</B><UL>
+<LI>Don't run in the house with your mouth full.<BR>
+<LI>If you hold it in long enough, the urge to pee will go away.<BR>
+<LI><A HREF="http://www.virtualcrack.com">This year, show her you love her with the gift of crack.</A>
+</UL></FONT>
+</TD></TR>
+</TABLE>
+</TD>
+<TD VALIGN="top" ALIGN="right" WIDTH="500">
+
+<TABLE WIDTH="475" BORDER="0" CELLPADDING="3" CELLSPACING="0">
+<TR><TD BGCOLOR="silver">
+<FONT FACE="arial"><B>01 - Design document</B></FONT>
+</TD></TR>
+<TR><TD><FONT FACE="arial" SIZE="-1">
+Whether you are being given a program to write or you are starting one of your own, no matter what the
+ size, the design document is the most critical piece of writing you will own through the entire
+ development process.  Most people never write one and I believe that's why most people give up on
+ their projects when they become hopelessly disfigured monsters that the peasants chase into a windmill
+ and set on fire.<BR>
+<BR>
+The design document should:<BR>
+<UL>
+<LI><B>Explain what the program is supposed to DO.</B>  The more detail the better.  I hear that in development
+ of the game <A HREF="http://www.cavedog.com/amen">AMEN</A> The design document included complete plans
+ of every level as well as the plot, target system specs and more.  This meant that when the programmers
+ sat down to write the engine they knew exactly what features the level designers were going to want.
+<LI><B>Give a rough idea of how the program is structured.</B>  90% of all the code I see on the net is
+ terribly confused because programmers keep hacking in new little features they think will be cool.  In
+ the process they completely destroy any hope of easily maintaining their code.  What I'm trying to say
+ is that at the same time you are thinking about this one little section of code you have to keep in
+ the back of your head an understanding of it's impact on the program overall.  Is there a way that you
+ can set this thing up so that it reuses previously written code?  Does it look like big pieces could be
+ recycled in future stuffs?  Does this part of your program depend on any other part and can you remove
+ that dependency?  Questions like these should always be lingering over you.
+<LI><B>Provide a timetable with achievable goals.</B>  Nothing feels better than killing a bug... except
+ the day to day euphoria that comes from knowing that your program is so well written you can add 
+ something new and it will run perfectly on the first try.  How do you achieve this mystical state?
+ If you follow your design document and said document is well written, goals will be met regularly
+ and easily.  I recommend that you build up your program in layers.  For example, I started with the
+ simplest possible window I could write that would create.  Then I added DirectX double buffering.
+ Then 3D hardware support.  Then I added model data and rendered a single polygon.  And so on.  As
+ demonstrated in the example, I chose small but important goals where I would be able to test and make
+ sure that all of the underlying, background material worked perfectly.  That way it would be easy to
+ figure out where the latest bug was - in the code I just added.
+</UL>
+There are very few reasons you should not be able to finish on time if you follow this GOOD ADVICE.
+ Some of those reasons might included<BR>
+<UL>
+<LI>Death in the family.  Yours, for instance.
+<LI>Having your hands chopped of for stealing.
+<LI>Lobotomy.
+<LI>etc...
+</UL>
+There is only one serious problem that <B>will</B> occur unless you are <I>extremely</I> good but you
+ can catch it before it causes any problems, then tag it and release it back into the wild.  If you are
+ adding a new feature to your program and you find that you have to change previously written code,
+ <CENTER><H2>W A T C H &nbsp; O U T .</H2></CENTER>
+This is a sign that you may have made a mistake in designing said previous code (well duh).  Do
+ <B>not</B> merely fix the program enough to add the new feature.  Step back and consider: how you can
+ make the smallest possible change so that anything else that does and will depend on the code can work?
+ It is because people do not fix this problem that problems compound on one another until your code is
+ a tangled ball of string pulled into a knot instead of a single thread running in a straight line.<BR>
+<BR>
+Yes, I know, writing a design document is a very boring thing to have to do.  I don't like it any more
+ than you do, but do it anyhow.  So you spend a week writing documentation.  It'll look great if anyone
+ shows an interest in your abilities (all nice and organized! ooh, we'll hire you) and I just might be
+ telling the truth about how it will save you time.<BR>
+<BR>
+<a href="#top">Back to the top</a>
+<hr>
+<B>NEXT: <A HREF="Engine02.shtml">Overall Structure</A></B><BR>
+<br><BR></FONT>
+</TD></TR></TABLE>
+</TD>
+</TR>
+
+</TABLE>
+
+<HR ALIGN="CENTER" SIZE="1" WIDTH="700" NOSHADE>
+<FONT FACE="arial" SIZE="-2">All photos copyright of their respective owners.  All other content of this website is &copy; 1997-1999 Dan Royer.<BR>
+Designed for IE 5.0+, 800x600x16 or greater.  Some pages use style sheets.<br>
+<A HREF="http://members.home.com/droyer/index.html"
+   TITLE="Dan's Homepage">http://members.home.com/droyer/index.html</A><br>
+</FONT>
+
+</CENTER>
+<BR>
+<BR>
+
+</BODY>
+</HTML>
